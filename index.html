@@ -1,0 +1,586 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Accelerator Bootcamp | Build an AI Application in One Weekend | Decoding Data Science</title><meta name="description" content="Live 3-session bootcamp, 27-29 Nov 2026. Build a working AI prototype, data approach and roadmap. CPD UK certificate. Early-bird $79, pay by card, invoice available.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Decoding Data Science"><meta property="og:title" content="AI Accelerator Bootcamp | Build an AI Application in One Weekend | Decoding Data Science"><meta property="og:description" content="Live 3-session bootcamp, 27-29 Nov 2026. Build a working AI prototype, data approach and roadmap. CPD UK certificate. Early-bird $79, pay by card, invoice available."><meta property="og:url" content="https://decoding-data-science.github.io/bootcamp/">
+<meta property="og:image" content="https://decoding-data-science.github.io/bootcamp/og-bootcamp9.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05080f"><style>html,body{margin:0;background:#05080f}</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>#dds-boot{
+    --bg:#05080f; --bg2:#0a111f; --panel:rgba(16,26,46,.62); --line:rgba(140,170,220,.16);
+    --cyan:#22d3ee; --violet:#8b5cf6; --amber:#f5a623;
+    --txt:#e7edf7; --muted:#94a3bd;
+    --grad:linear-gradient(92deg,#22d3ee 0%,#8b5cf6 100%);
+    --radius:18px;
+    font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--txt);
+    line-height:1.6; font-size:16px; margin:0; overflow-x:hidden; position:relative;
+  }
+  #dds-boot *,#dds-boot *::before,#dds-boot *::after{box-sizing:border-box;margin:0;padding:0}
+  #dds-boot img{max-width:100%;display:block}
+  #dds-boot a{text-decoration:none;color:inherit}
+  #dds-boot .wrap{max-width:1120px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+  #dds-boot section{padding:80px 0;position:relative}
+  #dds-boot h1,#dds-boot h2,#dds-boot h3{font-family:'Space Grotesk',sans-serif;line-height:1.1;letter-spacing:-.015em}
+  #dds-boot h2{font-size:clamp(28px,4.2vw,42px);margin-bottom:14px}
+  #dds-boot .kicker{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:10px;margin-bottom:14px}
+  #dds-boot .kicker::before{content:"";width:26px;height:1px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  #dds-boot .lead{color:var(--muted);font-size:17px;max-width:640px}
+  #dds-boot .center{text-align:center}
+  #dds-boot .center .lead{margin:0 auto}
+  #dds-boot .gx{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* reveal */
+  #dds-boot .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  #dds-boot .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    #dds-boot .rv{opacity:1;transform:none;transition:none}
+    #dds-boot *{animation:none!important;transition:none!important}
+  }
+
+  /* top bar */
+  #dds-boot .topbar{position:sticky;top:0;z-index:60;background:rgba(5,8,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+  #dds-boot .topbar .lab{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+  #dds-boot .pill{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13.5px;background:var(--grad);color:#05101c;border-radius:999px;padding:7px 18px;transition:transform .2s,box-shadow .2s;white-space:nowrap}
+  #dds-boot .pill:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(34,211,238,.4)}
+
+  /* hero with aurora */
+  #dds-boot .hero{padding:110px 0 90px;overflow:hidden;background:var(--bg)}
+  #dds-boot .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;pointer-events:none;animation:float 14s ease-in-out infinite}
+  #dds-boot .o1{width:520px;height:520px;background:#22d3ee;left:-140px;top:-120px;opacity:.28}
+  #dds-boot .o2{width:600px;height:600px;background:#8b5cf6;right:-180px;top:-80px;opacity:.34;animation-delay:-5s}
+  #dds-boot .o3{width:380px;height:380px;background:#f5a623;left:45%;bottom:-220px;opacity:.12;animation-delay:-9s}
+  @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,24px)}}
+  #dds-boot .grid-bg{position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(140,170,220,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(140,170,220,.07) 1px,transparent 1px);
+    background-size:48px 48px;mask-image:radial-gradient(700px 460px at 50% 20%,#000 25%,transparent 78%)}
+  #dds-boot .scan{position:absolute;left:0;right:0;height:140px;top:-140px;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(34,211,238,.09),transparent);animation:scan 7s linear infinite}
+  @keyframes scan{to{transform:translateY(900px)}}
+  #dds-boot .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:26px}
+  #dds-boot .chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;border:1px solid var(--line);border-radius:999px;padding:5px 14px;color:var(--muted);background:rgba(10,17,31,.7)}
+  #dds-boot .chip.hot{border-color:rgba(34,211,238,.5);color:var(--cyan)}
+  #dds-boot .chip.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);margin-right:8px;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.55)}50%{box-shadow:0 0 0 7px rgba(245,166,35,0)}}
+  #dds-boot .hero h1{font-size:clamp(40px,7vw,76px);text-align:center;max-width:960px;margin:0 auto 20px;font-weight:700}
+  #dds-boot .hero .sub{text-align:center;color:var(--muted);max-width:620px;margin:0 auto 34px;font-size:18px}
+  #dds-boot .cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+  #dds-boot .btn{font-family:'Space Grotesk',sans-serif;font-weight:600;border-radius:14px;padding:16px 32px;font-size:16px;display:inline-flex;align-items:center;gap:10px;transition:transform .2s,box-shadow .2s,border-color .2s;cursor:pointer}
+  #dds-boot .btn-p{background:var(--grad);color:#05101c;box-shadow:0 10px 34px rgba(34,211,238,.3)}
+  #dds-boot .btn-p:hover{transform:translateY(-2px);box-shadow:0 16px 46px rgba(139,92,246,.5)}
+  #dds-boot .btn-s{border:1px solid var(--line);color:var(--txt);background:rgba(10,17,31,.6);backdrop-filter:blur(6px)}
+  #dds-boot .btn-s:hover{border-color:rgba(34,211,238,.6);color:var(--cyan)}
+  #dds-boot .hero .note{text-align:center;font-size:12.5px;color:var(--muted);margin-top:16px}
+
+  /* stats */
+  #dds-boot .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2);padding:30px 0}
+  #dds-boot .strip .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;align-items:center}
+  #dds-boot .stat{text-align:center}
+  #dds-boot .stat .n{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#fff}
+  #dds-boot .stat .t{font-size:12.5px;color:var(--muted)}
+  #dds-boot .stat img{height:58px;width:auto;margin:0 auto 4px}
+
+  /* glass cards with spotlight */
+  #dds-boot .grid{display:grid;gap:16px;margin-top:40px}
+  #dds-boot .g3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  #dds-boot .g6{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  #dds-boot .card{position:relative;background:var(--panel);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:var(--radius);padding:24px;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s}
+  #dds-boot .card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.16),transparent 65%)}
+  #dds-boot .card:hover{transform:translateY(-5px);border-color:rgba(34,211,238,.5);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+  #dds-boot .card:hover::before{opacity:1}
+  #dds-boot .card h3{font-size:18px;margin:8px 0 6px;position:relative}
+  #dds-boot .card p{font-size:14.5px;color:var(--muted);position:relative}
+  #dds-boot .no{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--amber);position:relative}
+
+  /* path */
+  #dds-boot .path{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:46px}
+  #dds-boot .node{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px;text-align:left;position:relative;transition:transform .3s,border-color .3s}
+  #dds-boot .node:hover{transform:translateY(-4px);border-color:rgba(139,92,246,.6)}
+  #dds-boot .node b{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:12px;box-shadow:0 0 16px rgba(34,211,238,.35)}
+  #dds-boot .node span{display:block;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:4px}
+  #dds-boot .node small{display:block;font-size:12.5px;color:var(--muted);line-height:1.45}
+
+  /* terminal */
+  #dds-boot .ai{background:radial-gradient(800px 420px at 80% 0%,rgba(139,92,246,.2),transparent 65%),radial-gradient(600px 360px at 0% 100%,rgba(34,211,238,.14),transparent 65%),var(--bg2)}
+  #dds-boot .ai .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
+  #dds-boot .term{background:rgba(5,8,15,.9);border:1px solid rgba(34,211,238,.35);border-radius:18px;box-shadow:0 0 60px rgba(34,211,238,.12),0 30px 80px rgba(0,0,0,.55);overflow:hidden}
+  #dds-boot .term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:rgba(16,26,46,.7)}
+  #dds-boot .term-bar i{width:10px;height:10px;border-radius:50%;background:#2b3a57}
+  #dds-boot .term-bar span{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+  #dds-boot .term-body{padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;min-height:300px}
+  #dds-boot .tq{color:var(--txt);margin-top:10px}
+  #dds-boot .tq::before{content:"you  > ";color:var(--amber)}
+  #dds-boot .ta{color:var(--cyan);margin:2px 0 8px}
+  #dds-boot .ta::before{content:"ai   > ";color:var(--violet)}
+  #dds-boot .caret{display:inline-block;width:7px;height:14px;background:var(--cyan);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  #dds-boot .price{display:inline-flex;align-items:baseline;gap:10px;margin:22px 0 4px}
+  #dds-boot .price b{font-family:'Space Grotesk',sans-serif;font-size:46px;line-height:1}
+  #dds-boot .price span{font-size:13px;color:var(--muted)}
+  @media(max-width:860px){#dds-boot .ai .wrap{grid-template-columns:1fr}}
+
+  /* ecosystem */
+  #dds-boot .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:40px}
+  #dds-boot .pillar{border:1px solid var(--line);border-radius:var(--radius);padding:26px;background:linear-gradient(160deg,rgba(34,211,238,.07),rgba(16,26,46,.6) 55%);position:relative;overflow:hidden}
+  #dds-boot .pillar h3{font-size:20px;margin:6px 0}
+  #dds-boot .pillar p{font-size:14.5px;color:var(--muted)}
+  #dds-boot .partners{margin-top:34px;border:1px solid rgba(139,92,246,.4);border-radius:22px;padding:30px;background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(34,211,238,.06));text-align:center}
+  #dds-boot .partners h3{font-size:26px;margin-bottom:6px}
+  #dds-boot .partners p{color:var(--muted);max-width:620px;margin:0 auto}
+  #dds-boot .pchips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+  #dds-boot .pchips span{font-family:'JetBrains Mono',monospace;font-size:12.5px;border:1px solid rgba(139,92,246,.5);color:#d4c8ff;border-radius:999px;padding:8px 16px;background:rgba(5,8,15,.55);transition:border-color .2s,color .2s,box-shadow .2s}
+  #dds-boot .pchips span:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 20px rgba(34,211,238,.25)}
+
+  /* events */
+  #dds-boot .cdown{display:flex;gap:12px;justify-content:center;margin:26px 0 8px;flex-wrap:wrap}
+  #dds-boot .cd-cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;min-width:84px;padding:14px 10px;text-align:center}
+  #dds-boot .cd-num{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  #dds-boot .cd-lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  #dds-boot .ev .when{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);letter-spacing:.08em;position:relative}
+
+  /* topmate band */
+  #dds-boot .band{border:1px solid rgba(34,211,238,.4);border-radius:24px;padding:38px;background:radial-gradient(500px 240px at 90% 0%,rgba(34,211,238,.18),transparent 70%),linear-gradient(135deg,rgba(16,26,46,.9),rgba(10,17,31,.9));display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+  #dds-boot .band h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:6px}
+  #dds-boot .band p{color:var(--muted);max-width:560px}
+
+  /* host */
+  #dds-boot .host{display:grid;grid-template-columns:200px 1fr;gap:34px;align-items:center}
+  #dds-boot .host img{border-radius:var(--radius);border:1px solid var(--line);box-shadow:0 0 50px rgba(139,92,246,.25)}
+  @media(max-width:700px){#dds-boot .host{grid-template-columns:1fr;justify-items:center;text-align:center}#dds-boot .host img{max-width:200px}}
+
+  /* faq */
+  #dds-boot .faq-item{border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-bottom:10px;overflow:hidden}
+  #dds-boot .faq-q{width:100%;text-align:left;background:none;border:none;color:var(--txt);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;padding:17px 52px 17px 22px;cursor:pointer;position:relative}
+  #dds-boot .faq-q::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:22px;color:var(--cyan);transition:transform .25s}
+  #dds-boot .faq-item.open .faq-q::after{transform:translateY(-50%) rotate(45deg)}
+  #dds-boot .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  #dds-boot .faq-a p{padding:0 22px 18px;font-size:14.5px;color:var(--muted)}
+
+  /* final */
+  #dds-boot .final{text-align:center;padding:110px 0;overflow:hidden;background:var(--bg)}
+  #dds-boot .final h2{font-size:clamp(32px,5vw,54px);max-width:820px;margin:0 auto 16px}
+  #dds-boot .final .lead{margin:0 auto 30px}
+  #dds-boot .fine{margin:26px auto 0;font-size:12px;color:var(--muted);max-width:720px}
+  #dds-boot .org{margin-top:40px;border-top:1px solid var(--line);padding-top:20px;font-size:12.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+
+
+  /* network */
+  #dds-boot .net{background:radial-gradient(700px 360px at 50% 0%,rgba(139,92,246,.18),transparent 65%),var(--bg)}
+  #dds-boot .nets{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:42px}
+  #dds-boot .netc{position:relative;text-align:center;padding:34px 20px;border-radius:22px;border:1px solid rgba(34,211,238,.35);background:linear-gradient(160deg,rgba(34,211,238,.1),rgba(16,26,46,.7) 60%);overflow:hidden;box-shadow:0 0 50px rgba(34,211,238,.08)}
+  #dds-boot .netc::after{content:"";position:absolute;left:20%;right:20%;bottom:0;height:2px;background:var(--grad);box-shadow:0 0 18px var(--cyan)}
+  #dds-boot .netc .big{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(46px,6vw,66px);line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  #dds-boot .netc .lbl{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt)}
+  #dds-boot .netc .sub2{margin-top:6px;font-size:13.5px;color:var(--muted)}
+  #dds-boot .tiny{margin:26px auto 0;max-width:680px;text-align:center;font-size:12px;color:var(--muted)}
+
+  /* logo wall */
+  #dds-boot .logos{background:var(--bg2);overflow:hidden;padding:76px 0}
+  #dds-boot .mq{position:relative;margin-top:26px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+  #dds-boot .mq-track{display:flex;gap:16px;width:max-content;animation:mq 46s linear infinite}
+  #dds-boot .mq.rev .mq-track{animation-direction:reverse;animation-duration:54s}
+  #dds-boot .mq:hover .mq-track{animation-play-state:paused}
+  @keyframes mq{to{transform:translateX(-50%)}}
+  #dds-boot .lg{flex:0 0 auto;width:190px;height:90px;border-radius:16px;background:linear-gradient(160deg,#f6f9fe,#e3ebf7);border:1px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;padding:14px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .25s,box-shadow .25s}
+  #dds-boot .lg:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(34,211,238,.3)}
+  #dds-boot .lg img{max-height:56px;max-width:100%;width:auto;object-fit:contain}
+  #dds-boot .lg b{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#0b1426;letter-spacing:-.01em;text-align:center}
+
+  /* coverage */
+  #dds-boot .covs{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-top:34px}
+  #dds-boot .cov{border:1px solid var(--line);border-radius:var(--radius);padding:20px;background:var(--panel);transition:transform .25s,border-color .25s}
+  #dds-boot .cov:hover{transform:translateY(-4px);border-color:rgba(34,211,238,.5)}
+  #dds-boot .cov .ct{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px}
+  #dds-boot .cov .cs{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:var(--cyan);margin:6px 0 12px;text-transform:uppercase}
+  #dds-boot .cov .cq{font-size:14.5px;color:var(--muted);font-style:italic}
+  #dds-boot .gets{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:8px;font-size:14.5px;color:var(--muted)}
+  #dds-boot .gets li{padding-left:22px;position:relative}
+  #dds-boot .gets li:before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:50%;background:var(--grad)}
+  /* directory */
+  #dds-boot .tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:34px}
+  #dds-boot .tab{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;color:var(--muted);background:rgba(10,17,31,.7);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;transition:all .2s}
+  #dds-boot .tab:hover{color:var(--cyan);border-color:rgba(34,211,238,.5)}
+  #dds-boot .tab.on{color:#05101c;background:var(--grad);border-color:transparent;font-weight:700}
+  #dds-boot .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:26px;min-height:120px}
+  #dds-boot .dchip{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);font-size:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--txt);transition:border-color .2s,transform .2s,box-shadow .2s;animation:dIn .35s ease both}
+  #dds-boot a.dchip:hover{border-color:rgba(34,211,238,.6);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.4);color:var(--cyan)}
+  #dds-boot .dchip small{display:block;margin-top:3px;font-family:'Inter',sans-serif;font-weight:400;font-size:12px;color:var(--muted);line-height:1.4}
+  @keyframes dIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  #dds-boot .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:34px}
+  #dds-boot .stp{border:1px solid var(--line);border-radius:var(--radius);padding:20px;background:var(--panel)}
+  #dds-boot .stp b{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber);letter-spacing:.12em;display:block;margin-bottom:6px}
+  #dds-boot .stp p{font-size:14px;color:var(--muted)}
+  #dds-boot .ptl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:34px}
+  #dds-boot .ptl a{display:block;padding:20px;border-radius:var(--radius);border:1px solid rgba(34,211,238,.3);background:linear-gradient(160deg,rgba(34,211,238,.08),rgba(16,26,46,.7));transition:transform .25s,border-color .25s}
+  #dds-boot .ptl a:hover{transform:translateY(-4px);border-color:var(--cyan)}
+  #dds-boot .ptl h3{font-size:17px;margin-bottom:4px}
+  #dds-boot .ptl p{font-size:13.5px;color:var(--muted)}
+  #dds-boot .ptl span{display:block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--cyan);letter-spacing:.08em}
+
+  #dds-boot .float-cta{display:none;position:fixed;left:14px;right:14px;bottom:14px;z-index:70}
+  #dds-boot .float-cta a{display:flex;justify-content:center;background:var(--grad);color:#05101c;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15.5px;padding:15px;border-radius:14px;box-shadow:0 12px 36px rgba(34,211,238,.45)}
+  @media(max-width:680px){#dds-boot .float-cta{display:block}#dds-boot section{padding:60px 0}#dds-boot .hero{padding:72px 0 60px}#dds-boot .band{padding:26px}}
+
+#dds-boot .hero h1{font-size:clamp(36px,6.2vw,66px)}
+#dds-boot .sched{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;max-width:760px;margin:30px auto 0}
+#dds-boot .sd{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left}
+#dds-boot .sd b{display:block;font-family:'Space Grotesk',sans-serif;font-size:15px}
+#dds-boot .sd span{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan)}
+#dds-boot .buy{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:stretch;margin-top:40px}
+#dds-boot .incl{list-style:none;display:grid;gap:12px}
+#dds-boot .incl li{position:relative;padding-left:30px;color:var(--txt);font-size:15.5px}
+#dds-boot .incl li small{display:block;color:var(--muted);font-size:13.5px}
+#dds-boot .incl li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:50%;background:var(--grad)}
+#dds-boot .pbox{border:1px solid rgba(34,211,238,.45);border-radius:22px;padding:30px;background:radial-gradient(420px 220px at 90% 0%,rgba(139,92,246,.22),transparent 70%),var(--panel);display:flex;flex-direction:column;justify-content:center;text-align:center}
+#dds-boot .pbox .amt{font-family:'Space Grotesk',sans-serif;font-size:64px;font-weight:700;line-height:1}
+#dds-boot .pbox .was{color:var(--muted);font-size:13.5px;margin:6px 0 18px}
+#dds-boot .pbox .btn{justify-content:center;width:100%}
+#dds-boot .pbox .mini{font-size:12.5px;color:var(--muted);margin-top:14px}
+@media(max-width:860px){#dds-boot .buy{grid-template-columns:1fr}}
+#dds-boot .steps3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:36px}
+#dds-boot .fin{border:1px solid var(--line);border-radius:22px;padding:34px;background:var(--bg2);margin-top:34px}
+#dds-boot .fin h3{font-size:22px;margin-bottom:8px}
+#dds-boot .fin p{color:var(--muted);font-size:15px}
+#dds-boot .note-box{margin-top:18px;border-left:3px solid var(--cyan);background:rgba(34,211,238,.06);padding:16px 18px;border-radius:0 12px 12px 0;font-size:14.5px;color:var(--txt)}
+#dds-boot .fin2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:20px}
+#dds-boot .fin2 div{border:1px solid var(--line);border-radius:14px;padding:16px;font-size:14px;color:var(--muted)}
+#dds-boot .fin2 b{display:block;color:var(--txt);font-family:'Space Grotesk',sans-serif;margin-bottom:4px;font-size:15px}
+#dds-boot .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+@media(max-width:760px){#dds-boot .two{grid-template-columns:1fr}}
+#dds-boot .two .card h3{margin-top:0}
+#dds-boot .two ul{list-style:none;margin-top:10px;display:grid;gap:8px;position:relative}
+#dds-boot .two li{font-size:14.5px;color:var(--muted);padding-left:18px;position:relative}
+#dds-boot .two li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--cyan)}
+#dds-boot .two .nf li::before{background:#64748b}
+#dds-boot .up{margin-top:0;padding:46px 0;background:#120d03;border-top:1px solid rgba(245,166,35,.35);border-bottom:1px solid rgba(245,166,35,.35)}
+#dds-boot .up .box{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;border:1px dashed rgba(245,166,35,.6);border-radius:20px;padding:28px;background:rgba(245,166,35,.06)}
+#dds-boot .up .tag{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+#dds-boot .up h3{font-size:24px;margin:6px 0}
+#dds-boot .up p{color:#cdb98f;font-size:14.5px;max-width:600px}
+#dds-boot .btn-a{background:transparent;border:1.5px solid var(--amber);color:var(--amber)}
+#dds-boot .btn-a:hover{background:var(--amber);color:#1a1002}
+@media(max-width:760px){#dds-boot .up .box{grid-template-columns:1fr}}
+#dds-boot .cpd{background:#fff;border-radius:12px;padding:8px 12px;height:64px;width:auto;display:inline-block}
+#dds-boot .logo-chip{background:#fff;border-radius:10px;padding:5px 10px;display:inline-flex}
+#dds-boot .logo-chip img{height:26px;width:auto}
+
+#dds-boot .un{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:40px}
+#dds-boot .un .card .ic{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--cyan);position:relative}
+#dds-boot .cert{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;margin-top:40px}
+#dds-boot .cframe{border:1px solid rgba(34,211,238,.4);border-radius:20px;padding:14px;background:var(--panel);box-shadow:0 0 60px rgba(139,92,246,.22);min-height:220px;display:flex;align-items:center;justify-content:center}
+#dds-boot .cframe img{border-radius:10px;width:100%;height:auto}
+#dds-boot .cframe .ph{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);text-align:center;padding:40px 20px}
+#dds-boot .cert h3{font-size:26px;margin-bottom:10px}
+#dds-boot .cert p{color:var(--muted);margin-bottom:14px}
+@media(max-width:800px){#dds-boot .cert{grid-template-columns:1fr}}
+#dds-boot .imp{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:36px}
+#dds-boot .imp div{text-align:center;border:1px solid rgba(34,211,238,.3);border-radius:18px;padding:22px 12px;background:linear-gradient(160deg,rgba(34,211,238,.08),rgba(16,26,46,.6))}
+#dds-boot .imp b{display:block;font-family:'Space Grotesk',sans-serif;font-size:34px;line-height:1}
+#dds-boot .imp span{display:block;margin-top:8px;font-size:12.5px;color:var(--muted)}
+
+#dds-boot .un{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+#dds-boot .vs{max-width:760px;margin:36px auto 0;border:1px solid rgba(34,211,238,.35);border-radius:20px;overflow:hidden;background:var(--panel)}
+#dds-boot .vs .r{display:flex;justify-content:space-between;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line);font-size:15px}
+#dds-boot .vs .r span:last-child{font-family:'JetBrains Mono',monospace;color:var(--muted);white-space:nowrap}
+#dds-boot .vs .tot{background:rgba(139,92,246,.12);font-weight:600}
+#dds-boot .vs .tot span:last-child{color:var(--txt);text-decoration:line-through}
+#dds-boot .vs .you{background:rgba(34,211,238,.1);font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;border-bottom:none}
+#dds-boot .vs .you span:last-child{color:var(--cyan);font-size:24px;text-decoration:none}
+#dds-boot .tsl{position:relative;max-width:820px;margin:36px auto 0}
+#dds-boot .tview{overflow:hidden;border-radius:22px}
+#dds-boot .ttrack{display:flex;transition:transform .6s ease}
+#dds-boot .tcard{flex:0 0 100%;padding:34px 38px;border:1px solid rgba(34,211,238,.3);border-radius:22px;background:linear-gradient(160deg,rgba(139,92,246,.12),rgba(16,26,46,.75));min-height:230px}
+#dds-boot .stars{color:var(--amber);letter-spacing:3px;font-size:18px}
+#dds-boot .tcard h3{font-size:22px;margin:10px 0 8px}
+#dds-boot .tcard p{color:var(--muted);font-size:15.5px}
+#dds-boot .tcard .who{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--cyan);letter-spacing:.05em}
+#dds-boot .tnav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px}
+#dds-boot .tnav button{background:var(--panel);border:1px solid var(--line);color:var(--txt);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px}
+#dds-boot .tnav button:hover{border-color:var(--cyan);color:var(--cyan)}
+#dds-boot .dots{display:flex;gap:7px}
+#dds-boot .dots i{width:8px;height:8px;border-radius:50%;background:#2b3a57;cursor:pointer}
+#dds-boot .dots i.on{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+#dds-boot .tp{text-align:center;margin-top:16px;font-size:13px;color:var(--muted)}
+#dds-boot .tp a{color:var(--cyan);text-decoration:underline}
+@media(max-width:600px){#dds-boot .tcard{padding:24px 20px}}
+
+#dds-boot .certs{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+#dds-boot .certs .cframe{height:440px}
+#dds-boot .certs .cframe img{width:auto;max-width:100%;max-height:100%;object-fit:contain}
+@media(max-width:800px){#dds-boot .certs .cframe{height:auto}}
+@media(max-width:800px){#dds-boot .certs{grid-template-columns:1fr}}
+#dds-boot .clab{margin-top:12px;font-size:14px;color:var(--muted);text-align:center}
+#dds-boot .clab b{display:block;color:var(--txt);font-family:'Space Grotesk',sans-serif;font-size:17px;margin-bottom:2px}
+#dds-boot .booklink{margin-top:14px;font-size:13.5px;color:var(--muted);word-break:break-all}
+#dds-boot .booklink a{color:var(--cyan);text-decoration:underline}
+@media(max-width:480px){#dds-boot .cd-cell{min-width:62px;padding:10px 4px}#dds-boot .cd-num{font-size:24px}#dds-boot .cdown{gap:8px;flex-wrap:nowrap}#dds-boot .topbar .lab{display:none}}
+</style>
+<div id="dds-boot">
+
+<div class="topbar"><img src="https://raw.githubusercontent.com/Decoding-Data-Science/airesidency/main/DDS%20HIGH%20RES%20Logo%20%20copywhite.png" alt="Decoding Data Science" style="height:30px;width:auto"><span class="lab">AI Accelerator Bootcamp &middot; 9th Edition</span><a class="pill" data-buy href="#">Reserve your seat</a></div>
+
+<section class="hero">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grid-bg"></div><div class="scan"></div>
+  <div class="wrap">
+    <div class="chips"><span class="chip hot">CPD UK certified</span><span class="chip">Live online &middot; 27&ndash;29 Nov 2026</span><span class="chip live">Starts this Friday</span></div>
+    <h1>Build a working <span class="gx">AI application</span> in one weekend.</h1>
+    <p class="sub">A three-session live bootcamp for professionals. You arrive with an idea and leave with a working prototype, a data approach and a roadmap you can show your team.</p>
+    <div class="cta-row"><a class="btn btn-p" data-buy href="#">Reserve your seat &middot; $79</a></div>
+    <p class="note">Early-bird price, rises after the first 10 seats. Secure checkout. Receipt by email.</p>
+    <div class="cdown"><div class="cd-cell"><div class="cd-num" id="bD">00</div><div class="cd-lab">Days</div></div><div class="cd-cell"><div class="cd-num" id="bH">00</div><div class="cd-lab">Hours</div></div><div class="cd-cell"><div class="cd-num" id="bM">00</div><div class="cd-lab">Mins</div></div><div class="cd-cell"><div class="cd-num" id="bS">00</div><div class="cd-lab">Secs</div></div></div>
+    <p class="note" id="bNote">until session 1 begins</p>
+    <div class="sched">
+      <div class="sd"><b>Session 1 &middot; Fri 27 Nov</b><span>6:30 &ndash; 8:30 PM GST</span></div>
+      <div class="sd"><b>Session 2 &middot; Sat 28 Nov</b><span>11:00 AM &ndash; 1:00 PM GST</span></div>
+      <div class="sd"><b>Session 3 &middot; Sun 29 Nov</b><span>3:00 &ndash; 5:00 PM GST</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">What you walk away with</span><h2>One project. <span class="gx">Three things you can show.</span></h2><p class="lead">Not another set of tutorials. You build one real project from problem to prototype, guided live.</p></div>
+    <div class="grid g3">
+      <div class="card rv"><span class="no">01</span><h3>A working prototype</h3><p>An AI application you built yourself, running end to end, with prompts and workflow you understand.</p></div>
+      <div class="card rv"><span class="no">02</span><h3>A clear problem and data approach</h3><p>A defined user, scope and success measure, plus a data plan that fits the problem.</p></div>
+      <div class="card rv"><span class="no">03</span><h3>A roadmap to take it further</h3><p>What to test, what to fix and what to build next, so the work continues after the weekend.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">Why most AI projects stall</span><h2>The mistakes this weekend is built to <span class="gx">remove</span>.</h2></div>
+    <div class="grid g3">
+      <div class="card rv"><span class="no">MISTAKE 1</span><h3>Starting with the tool</h3><p>Teams pick a model first and look for a problem later. You start with the user and the outcome.</p></div>
+      <div class="card rv"><span class="no">MISTAKE 2</span><h3>Watching, not building</h3><p>Courses end with notes, not a working project. Here you leave with something that runs.</p></div>
+      <div class="card rv"><span class="no">MISTAKE 3</span><h3>No way to know if it works</h3><p>Without testing, a demo is a guess. You learn to check results and reduce failures.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">The method</span><h2>Clarity. Prototype. <span class="gx">Evidence.</span></h2><p class="lead">Every session follows the same three-step build loop, so you always know what comes next.</p></div>
+    <div class="path">
+      <div class="node rv"><b>0</b><span>Day 0 prep</span><small>Setup guide, links and a checklist before you start.</small></div>
+      <div class="node rv"><b>1</b><span>Clarity</span><small>Problem, user, scope and success measure.</small></div>
+      <div class="node rv"><b>2</b><span>Prototype</span><small>Workflow, prompts and your first build.</small></div>
+      <div class="node rv"><b>3</b><span>Evidence</span><small>Testing, fewer failures, refinement and your final project.</small></div>
+    </div>
+  </div>
+</section>
+
+
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">What this can unlock</span><h2>More than a weekend. <span class="gx">A skill you can use on Monday.</span></h2><p class="lead">Seven ways participants put the bootcamp to work. These are possibilities, not guarantees. Your result depends on the effort you put in.</p></div>
+    <div class="un">
+      <div class="card rv"><span class="ic">01 &middot; SAVE TIME</span><h3>Take hours out of your week</h3><p>Build a workflow that automates a repeated task, so the same work takes minutes instead of hours.</p></div>
+      <div class="card rv"><span class="ic">02 &middot; SOLVE YOUR PROBLEM</span><h3>Fix a real problem, not a demo</h3><p>You pick the problem from your own work or business and leave with a first working solution to it.</p></div>
+      <div class="card rv"><span class="ic">03 &middot; MONEY IMPACT</span><h3>Cut cost, add value</h3><p>Reduce manual effort and outside spend, and show your team a measurable improvement you can point to.</p></div>
+      <div class="card rv"><span class="ic">04 &middot; CAREER</span><h3>Build your career story</h3><p>A finished AI project and a recognised certificate give you something concrete to put on your CV and LinkedIn.</p></div>
+      <div class="card rv"><span class="ic">05 &middot; JOBS</span><h3>Stand out when you apply</h3><p>Show what you built when you apply or interview. A real project speaks louder than a course list. This does not guarantee a job.</p></div>
+      <div class="card rv"><span class="ic">06 &middot; FREELANCE</span><h3>A path to paid AI projects</h3><p>Use your prototype as a sample when you pitch clients. Consultants report first AI projects for small businesses in the $4,000 to $10,000 range, while marketplace gigs pay far less. No income is promised.</p></div>
+      <div class="card rv"><span class="ic">07 &middot; LEARNING ACCESS</span><h3>Keep the knowledge</h3><p>Day 0 prep, learning materials and the builder group stay with you, so you can keep learning after Sunday.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">Your proof</span><h2>Two certificates. <span class="gx">One weekend.</span></h2><p class="lead">Finish the bootcamp and receive both: the Decoding Data Science certificate of completion and the official CPD certificate. Add them to your CV, LinkedIn and professional development record.</p></div>
+    <div class="certs">
+      <div class="rv"><div class="cframe"><img id="certDds" src="" alt="Decoding Data Science certificate of completion, AI Accelerator Bootcamp" loading="lazy"><div class="ph" style="display:none">Certificate of completion preview</div></div><p class="clab"><b>Certificate of completion</b>Issued by Decoding Data Science, a CPD approved training provider.</p></div>
+      <div class="rv"><div class="cframe"><img id="certCpd" src="" alt="Official CPD certificate, AI Accelerator Bootcamp" loading="lazy"><div class="ph" style="display:none">Official CPD certificate preview</div></div><p class="clab"><b>Official CPD certificate</b>Certificate of Continuing Professional Development from The CPD Certification Service, with 10 CPD hours and a QR code anyone can scan to verify.</p></div>
+    </div>
+    <div class="center rv" style="margin-top:30px"><a class="btn btn-p" data-buy href="#">Reserve your seat &middot; $79</a><p class="booklink">Booking page: <a data-buy data-showurl href="#"></a></p></div>
+  </div>
+</section>
+
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">The impact so far</span><h2>Learn from a community that <span class="gx">ships</span>.</h2></div>
+    <div class="imp rv">
+      <div><b class="gx">9th</b><span>bootcamp edition</span></div>
+      <div><b class="gx">211K+</b><span>community followers</span></div>
+      <div><b class="gx">1,200+</b><span>free AI workshops and masterclasses</span></div>
+      <div><b class="gx">14</b><span>hackathons run</span></div>
+      <div><b class="gx">50+</b><span>countries reached</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">What learners say</span><h2>Rated <span class="gx">4.7 out of 5</span> on Trustpilot.</h2><p class="lead">From 120 reviews of Decoding Data Science. Summaries of selected reviews below, with names as published.</p></div>
+    <div class="tsl rv"><div class="tview"><div class="ttrack" id="tTrack"><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57"></span></div><h3>From understanding AI to building with it</h3><p>Built a working voice chatbot during a DDS agentic AI challenge, using free open-source tools on a laptop with no GPU.</p><div class="who">Surendranath Duvvuru &middot; India &middot; Trustpilot, Nov 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57">&#9733;</span></div><h3>AI Accelerator Bootcamp</h3><p>Found the bootcamp a good introduction to applying LLMs in HR and other fields, with helpful resources to keep.</p><div class="who">Adam Rashad &middot; UAE &middot; Trustpilot, Nov 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57">&#9733;</span></div><h3>From AI curious to AI builder</h3><p>Completed the AI Accelerator Bootcamp and built an HR policy assistant using RAG, LlamaIndex and Pinecone.</p><div class="who">Misty Waters &middot; USA &middot; Trustpilot, Jun 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57"></span></div><h3>AI Accelerator Bootcamp</h3><p>Described the DDS AI Accelerator Bootcamp as amazing and genuinely enjoyable.</p><div class="who">Sumaya Fathima &middot; UAE &middot; Trustpilot, Sep 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57"></span></div><h3>A great AI community</h3><p>Built skills in Python, machine learning, RAG and LLMs through hands-on projects as an AI Residency member.</p><div class="who">Vaibhav T. &middot; India &middot; Trustpilot, Aug 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57"></span></div><h3>Building an AI app end to end</h3><p>Learned how to build a complete AI application from start to finish through a DDS build challenge.</p><div class="who">Nipun Kavinda &middot; UAE &middot; Trustpilot, Jun 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57"></span></div><h3>Learnt a lot</h3><p>Learned to build custom chatbots that combine several different APIs.</p><div class="who">Mohith Nikesh &middot; UAE &middot; Trustpilot, May 2026</div></div><div class="tcard"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;<span style="color:#2b3a57"></span></div><h3>Practical AI skills</h3><p>Values the practical learning, regular live Zoom sessions, videos and AI news updates.</p><div class="who">Sebastian B. &middot; Germany &middot; Trustpilot, Nov 2026</div></div></div></div>
+      <div class="tnav"><button id="tPrev" aria-label="Previous">&#8249;</button><div class="dots" id="tDots"></div><button id="tNext" aria-label="Next">&#8250;</button></div>
+      <p class="tp">Read every review in full on <a href="https://www.trustpilot.com/review/decodingdatascience.com" target="_blank" rel="noopener">Trustpilot</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="buy" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">What you get and what it costs</span><h2>$1,350 of value. <span class="gx">Yours for $79.</span></h2></div>
+    <div class="vs rv">
+      <div class="r"><span>Three live build sessions with Mohammad Arshad</span><span>$600</span></div>
+      <div class="r"><span>Your guided project: prototype, data plan and roadmap</span><span>$300</span></div>
+      <div class="r"><span>Python Essentials Certification access</span><span>$200</span></div>
+      <div class="r"><span>CPD UK certificate</span><span>$150</span></div>
+      <div class="r"><span>Day 0 prep, learning materials and builder group</span><span>$100</span></div>
+      <div class="r tot"><span>Total value</span><span>$1,350</span></div>
+      <div class="r you"><span>Your early-bird price</span><span>$79</span></div>
+    </div>
+    <p class="tiny">Values are Decoding Data Science's own estimate of what each part would cost separately.</p>
+
+    <div class="buy">
+      <div class="rv">
+        <ul class="incl">
+          <li>Three live sessions with Mohammad Arshad<small>Friday, Saturday and Sunday, online, about two hours each.</small></li>
+          <li>A guided build of your own project<small>From problem statement to working prototype and roadmap.</small></li>
+          <li>CPD UK certificate<small>Awarded by Decoding Data Science, a CPD approved training provider.</small></li>
+          <li>Day 0 prep resources<small>Setup guidance, learning links and a checklist, sent before the first session.</small></li>
+          <li>Private builder WhatsApp group<small>Ask questions and share progress with the cohort.</small></li>
+          <li>Free agentic AI masterclass, Sunday 29 Nov<small>Part of the programme.</small></li>
+          <li>Early-enrolment learning materials<small>Includes the Python Essentials Certification access, subject to the terms on the checkout page.</small></li>
+        </ul>
+      </div>
+      <div class="pbox rv">
+        <span class="kicker" style="justify-content:center">Early-bird price</span>
+        <div class="amt gx">$79</div>
+        <div class="was">USD, one payment. Price rises after the first 10 seats.</div>
+        <a class="btn btn-p" data-buy href="#">Reserve your seat</a>
+        <p class="mini">Card payment on a secure checkout. Confirmation and receipt are emailed to you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">How to pay</span><h2>Three steps. <span class="gx">About two minutes.</span></h2></div>
+    <div class="steps3">
+      <div class="card rv"><span class="no">STEP 1</span><h3>Open the secure checkout</h3><p>Click Reserve your seat. You land on the Decoding Data Science checkout in your browser.</p></div>
+      <div class="card rv"><span class="no">STEP 2</span><h3>Pay by card</h3><p>Pay $79 in US dollars. International cards are accepted, so you can pay from anywhere.</p></div>
+      <div class="card rv"><span class="no">STEP 3</span><h3>Get your access</h3><p>You receive a confirmation email, the Day 0 prep pack and the invite to the builder group.</p></div>
+    </div>
+
+    <div class="fin rv">
+      <span class="kicker">Paying with company money?</span>
+      <h3 style="margin-top:10px">Make the case to your manager or finance team in two minutes.</h3>
+      <p>The price is a fraction of a typical external AI course, the certificate is recognised for professional development, and the output is a project you can apply at work.</p>
+      <div class="fin2">
+        <div><b>Receipt</b>A payment confirmation is emailed at purchase.</div>
+        <div><b>Company invoice</b>Need it in your company name? Email us your company details after paying and we will issue it.</div>
+        <div><b>Outside the UAE</b>Priced in USD and open to professionals in any country.</div>
+      </div>
+      <div class="note-box"><b>Copy and send to your manager:</b><br>
+      "I would like to attend the CPD UK certified AI Accelerator Bootcamp run by Decoding Data Science, live online on 27, 28 and 29 November. The cost is USD 79. I will build a working AI prototype for a real problem in our team and bring back the project and a roadmap. It includes a CPD UK certificate for my professional development record."</div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="center rv"><span class="kicker">Is it for you</span><h2>Built for people who want to <span class="gx">build</span>.</h2></div>
+    <div class="two">
+      <div class="card rv"><h3>Good fit</h3><ul><li>AI-curious professionals who want to build, not only watch</li><li>Beginner to intermediate learners who want a guided project</li><li>Anyone who needs a portfolio piece or a workplace project</li></ul></div>
+      <div class="card rv"><h3>Not the right fit</h3><ul class="nf"><li>You want a recorded course to watch later at your own pace</li><li>You are looking for advanced research-level training</li><li>You cannot attend any of the three live sessions</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="host rv">
+      <img src="https://raw.githubusercontent.com/Decoding-Data-Science/airesidency/main/Arshad_photo.png" alt="Mohammad Arshad, Founder of Decoding Data Science" loading="lazy">
+      <div>
+        <span class="kicker">Your instructor</span>
+        <h2 style="margin-top:8px">Mohammad Arshad</h2>
+        <p class="lead" style="margin-bottom:16px">Founder of Decoding Data Science. 21 years in data, AI and technology, with experience across MAF, Accenture, HP and Dell. Global keynote speaker at LEAP, GITEX and the Global AI Show.</p>
+        <img class="cpd" src="https://raw.githubusercontent.com/Decoding-Data-Science/airesidency/main/cpdmember-logo-1-300x275.webp" alt="CPD Member" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--bg2)">
+  <div class="wrap" style="max-width:820px">
+    <div class="center rv"><span class="kicker">Questions</span><h2>Before you <span class="gx">book</span>.</h2></div>
+    <div id="bFaq" style="margin-top:30px">
+      <div class="faq-item"><button class="faq-q">Do I need coding experience?</button><div class="faq-a"><p>No. The programme is designed for beginner to intermediate learners, and Day 0 prep gets your setup ready before session 1.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Is it live or recorded?</button><div class="faq-a"><p>Live, online, in three sessions on 27, 28 and 29 November. All times are Dubai time (GST).</p></div></div>
+      <div class="faq-item"><button class="faq-q">Can I get an invoice for my company?</button><div class="faq-a"><p>Yes. After paying, email us your company name and address and we will issue it. You also get a payment confirmation by email at checkout.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Can I attend from outside the UAE?</button><div class="faq-a"><p>Yes. It is online and priced in US dollars. Check the session times in your time zone.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What certificate do I receive?</button><div class="faq-a"><p>A CPD UK certificate issued by Decoding Data Science, a CPD approved training provider.</p></div></div>
+      <div class="faq-item"><button class="faq-q">What if I miss a session?</button><div class="faq-a"><p>Contact us through the builder group. Terms for make-up access are on the checkout page.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="orb o2" style="opacity:.25"></div>
+  <div class="wrap">
+    <h2 class="rv">Start Friday with an idea. <span class="gx">Finish Sunday with a prototype.</span></h2>
+    <p class="lead rv">Early-bird price of $79 applies to the first 10 seats.</p>
+    <div class="cta-row rv"><a class="btn btn-p" data-buy href="#">Reserve your seat &middot; $79</a></div>
+    <p class="booklink rv">Booking page: <a data-buy data-showurl href="#"></a></p>
+    <p class="fine">Any rewards, scholarships or licences mentioned on the checkout page are subject to eligibility, partner approval, project quality, submission completion and final review. Nothing here is a promise of a job, income or a prize. Outcomes depend on your effort and circumstances.</p>
+  </div>
+</section>
+
+<div class="up">
+  <div class="wrap">
+    <div class="box rv">
+      <div>
+        <span class="tag">Optional &middot; after the bootcamp</span>
+        <h3>Keep building with the AI Guild</h3>
+        <p>An ongoing paid membership for practice labs and a builder community, from $19 a month. You do not need it for the bootcamp.</p>
+      </div>
+      <a class="btn btn-a" data-guild href="#">See the AI Guild</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap"><p class="org" style="text-align:center">Decoding Data Science &middot; Dubai &middot; CPD approved training provider</p></div>
+</div>
+
+<script>
+(function(){
+  var BUY_URL='https://nas.com/artificialintelligence/challenges/ai-accelerator-bootcamp-ai-curious-to-ai-builders-nov';
+  var GUILD_URL='https://nas.io/aiguild';
+  /* Certificates: paste the raw GitHub link of each image here. */
+  var CERT_DDS='https://raw.githubusercontent.com/Decoding-Data-Science/airesidency/main/Worod%20AI%20Accelerator%20Jul.png';
+  var CERT_CPD='https://raw.githubusercontent.com/Decoding-Data-Science/airesidency/main/1795538718861.jpeg';
+  [['certDds',CERT_DDS],['certCpd',CERT_CPD]].forEach(function(p){var im=document.getElementById(p[0]);if(!im)return;im.onerror=function(){im.style.display='none';im.nextElementSibling.style.display='block'};im.src=p[1]});
+  var q=new URLSearchParams(location.search),src=(q.get('utm_source')||q.get('ref')||'').replace(/[^A-Za-z0-9_-]/g,'').slice(0,60);
+  var u=BUY_URL+(src?('?utm_source='+encodeURIComponent(src)):'');
+  document.querySelectorAll('#dds-boot [data-buy]').forEach(function(a,i){a.setAttribute('href',u);a.setAttribute('rel','noopener');a.addEventListener('click',function(){window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'bootcamp9_cta_click',slot:i})})});
+  document.querySelectorAll('#dds-boot [data-showurl]').forEach(function(a){a.textContent=BUY_URL.replace('https://','')});
+  document.querySelectorAll('#dds-boot [data-guild]').forEach(function(a){a.setAttribute('href',GUILD_URL)});
+
+  var tr=document.getElementById('tTrack');
+  if(tr){var n=tr.children.length,k=0,dw=document.getElementById('tDots'),timer;
+    for(var j=0;j<n;j++){var dd=document.createElement('i');(function(x){dd.onclick=function(){go(x);rs()}})(j);dw.appendChild(dd)}
+    function go(x){k=(x+n)%n;tr.style.transform='translateX(-'+(k*100)+'%)';[].forEach.call(dw.children,function(e,i){e.className=i===k?'on':''})}
+    function rs(){clearInterval(timer);if(!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches))timer=setInterval(function(){go(k+1)},6000)}
+    document.getElementById('tPrev').onclick=function(){go(k-1);rs()};document.getElementById('tNext').onclick=function(){go(k+1);rs()};
+    tr.parentElement.addEventListener('mouseenter',function(){clearInterval(timer)});tr.parentElement.addEventListener('mouseleave',rs);
+    var sx=null;tr.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});tr.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40){go(k+(dx<0?1:-1));rs()}sx=null});
+    go(0);rs()}
+  function pad(n){return (n<10?'0':'')+n}
+  var T=new Date('2026-11-27T18:30:00+04:00').getTime();
+  function tick(){var d=Math.max(0,T-Date.now()),g=function(i){return document.getElementById(i)};
+    if(g('bD')){g('bD').textContent=pad(Math.floor(d/864e5));g('bH').textContent=pad(Math.floor(d%864e5/36e5));g('bM').textContent=pad(Math.floor(d%36e5/6e4));g('bS').textContent=pad(Math.floor(d%6e4/1e3));
+    if(d===0&&g('bNote'))g('bNote').textContent='Session 1 has started. Check the checkout page for late entry.'}}
+  tick();setInterval(tick,1000);
+  document.querySelectorAll('#bFaq .faq-q').forEach(function(qb){qb.addEventListener('click',function(){
+    var item=qb.parentElement,a=item.querySelector('.faq-a'),open=item.classList.contains('open');
+    document.querySelectorAll('#bFaq .faq-item.open').forEach(function(o){o.classList.remove('open');o.querySelector('.faq-a').style.maxHeight=null});
+    if(!open){item.classList.add('open');a.style.maxHeight=a.scrollHeight+'px'}})});
+  document.querySelectorAll('#dds-boot .card').forEach(function(c){c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')})});
+  var els=document.querySelectorAll('#dds-boot .rv');
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{threshold:.12});els.forEach(function(el){io.observe(el)})}else{els.forEach(function(el){el.classList.add('in')})}
+})();
+</script>
+</body></html>
