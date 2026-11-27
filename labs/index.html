@@ -207,6 +207,7 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
     <button class="tab" data-lab="emb">Embeddings and dimensions</button>
     <button class="tab" data-lab="agent">Agent router</button>
     <button class="tab" data-lab="fail">Failure modes</button>
+    <button class="tab" data-lab="llm">LLM models</button>
     <button class="tab" data-lab="cost">Cost calculator</button>
   </div>
 
@@ -317,15 +318,50 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
     </div>
   </div>
 
+  <!-- LLM MODELS -->
+  <div class="lab" id="lab-llm">
+    <h3>Which LLM do we plug into the notebooks?</h3>
+    <p class="sub">Model list and prices checked on 27 Nov 2026 for AI Accelerator Bootcamp 9. Prices are US dollars per 1 million tokens, standard tier. Models and prices change often, so confirm on the provider page before you budget.</p>
+    <div class="grid" style="margin-top:14px">
+      <div class="card am"><div class="tag">Class pick | OpenAI notebooks</div><h3>gpt-5.4-mini</h3><p>The model the notebooks were built and tested with. $0.75 in, $4.50 out. Cheaper newer option: <b>gpt-6-luna</b> at $0.10 in, $0.50 out.</p></div>
+      <div class="card"><div class="tag">Class pick | Gemini notebooks</div><h3>gemini-3.8-flash</h3><p>Stable Flash model. $0.75 in, $3.75 out until 31 Dec 2026, then $1.50 and $7.50. The newest family is <b>gemini-4-argon</b>.</p></div>
+      <div class="card"><div class="tag">Embeddings</div><h3>One model per index</h3><p>text-embedding-3-small ($0.02) for OpenAI, gemini-embedding-001 ($0.15) for Gemini. Never mix them in one index: the vector sizes differ.</p></div>
+    </div>
+    <div class="msg warn" style="margin-top:14px">Dates that matter this week: Gemini 4 Argon rises from $2/$10 to $4/$20 on 1 Dec 2026. Gemini 3.8 Flash rises to $1.50/$7.50 on 1 Jan 2027. Use the price window in the Cost calculator tab.</div>
+
+    <label style="margin-top:20px">OpenAI</label>
+    <div class="tw"><table id="llmOA"></table></div>
+    <label style="margin-top:20px">Google Gemini</label>
+    <div class="tw"><table id="llmGG"></table></div>
+    <label style="margin-top:20px">Embedding models</label>
+    <div class="tw"><table id="llmEmb"></table></div>
+
+    <label style="margin-top:20px">What to change in the notebooks</label>
+<pre>OpenAI notebooks  (Step 3 / setup cell)
+MODEL = "gpt-5.4-mini"        # class default
+MODEL = "gpt-6-luna"          # cheapest current option
+MODEL = "gpt-6.2-sol"         # stronger, for the hard SQL questions
+EMBED_MODEL = "text-embedding-3-small"
+
+Gemini notebooks  (setup cell)
+MODEL = "gemini-3.8-flash"    # class default
+MODEL = "gemini-4-argon"      # newest family
+MODEL = "gemini-3.5-flash-lite"   # cheapest stable
+EMBED_MODEL = "gemini-embedding-001"</pre>
+    <div class="note">Before class: change the model name in one notebook, run it top to bottom once, and check that LlamaIndex accepts the name. If it complains about an unknown model, run pip install -U llama-index-llms-openai (or llama-index-llms-google-genai). The reasoning_effort setting in the OpenAI notebooks was tested on gpt-5.4-mini only. Gemini bills thinking tokens as output, so keep thinking low for the chatbot.</div>
+    <div class="note" style="margin-top:8px">Naming note: GPT-5.4 is an OpenAI model and Gemini is a separate Google family (3.x and 4). There is no Gemini 5.4.</div>
+    <div class="note" style="margin-top:8px">Sources: OpenAI developers pricing and models pages, Google AI for Developers models and pricing pages, and price trackers (benchlm, cloudzero, morphllm) for Terra, Luna and the Gemini 3.8 and 4 rates that the official pricing pages did not show clearly.</div>
+  </div>
+
   <!-- COST -->
   <div class="lab" id="lab-cost">
     <h3>Cost calculator</h3>
-    <p class="sub">OpenAI API prices in US dollars per 1 million tokens, from OpenAI's model pages checked on 27 Nov 2026 (gpt-5.4-mini: $0.75 input, $4.50 output; text-embedding-3-small: $0.02). Prices are editable. Always confirm on <a href="https://openai.com/api/pricing/" target="_blank" rel="noopener">openai.com/api/pricing</a> before you budget.</p>
+    <p class="sub">Pick an OpenAI or Gemini model, a price window and the usage. Prices are US dollars per 1 million tokens, checked on 27 Nov 2026, and every price box is editable. This is a planning estimate, not an invoice.</p>
     <div class="two" style="margin-top:16px">
       <div class="ctl">
         <label>Generation model</label><select id="kModel"></select>
         <label>Price window</label>
-        <select id="kWin"><option value="0">Standard rate</option></select>
+        <select id="kWin"><option value="0">Today (27 Nov 2026)</option><option value="1">From 1 Dec 2026</option><option value="2">From 1 Jan 2027</option></select>
         <div class="two" style="gap:10px"><div class="ctl"><label>Input $/1M</label><input type="number" id="kIn" step="0.01"></div><div class="ctl"><label>Output $/1M</label><input type="number" id="kOut" step="0.01"></div></div>
         <label>Mode</label>
         <div class="seg" id="kMode"><button data-v="1">Chatbot (1 call)</button><button data-v="3" class="on">Agent (3 calls)</button></div>
@@ -333,6 +369,9 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
         <label>Questions per employee per month <output id="oQ">8</output></label><input type="range" id="kQ" min="1" max="100" value="8">
         <label>top_k <output id="oKK">3</output></label><input type="range" id="kK" min="1" max="10" value="3">
         <label>Average chunk size (tokens) <output id="oC">215</output></label><input type="range" id="kC" min="50" max="1000" value="215">
+        <label>Embedding model</label><select id="kEmb"><option value="0.02">text-embedding-3-small ($0.02)</option><option value="0.13">text-embedding-3-large ($0.13)</option><option value="0.15">gemini-embedding-001 ($0.15)</option></select>
+        <label>Currency</label><div class="seg" id="kCur"><button data-v="1" class="on">USD</button><button data-v="3.6725">AED</button></div>
+        <label>Students in the bootcamp <output id="oS">30</output></label><input type="range" id="kS" min="1" max="200" value="30">
         <label>Embedding dimensions (Pinecone index)</label>
         <div class="seg" id="kDim"><button data-v="512">512</button><button data-v="1536" class="on">1536</button><button data-v="3072">3072</button></div>
         <label>Hosting and vector database, $ per month</label><input type="number" id="kHost" value="0" step="1" min="0">
@@ -346,7 +385,7 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
               + top_k x chunk tokens + tool output 150 x (calls - 1)
 output tokens = answer 120 + 40 x (calls - 1)
 cost / question = input x in-price + output x out-price
-embedding (one time) = chunks x chunk tokens x $0.02 / 1M
+embedding (one time) = chunks x chunk tokens x embedding price / 1M
 vector storage = vectors x dimensions x 4 bytes</pre>
         <div class="note">Assumptions are rounded teaching values. Real usage depends on your prompt length and how often the agent loops.</div>
       </div>
@@ -666,11 +705,21 @@ $('#fSel').onchange = renderFail; seg('#fFix', renderFail);
 
 /* ---------- COST LAB ---------- */
 const MODELS = [
- {id: 'gpt-5.4-mini', p: [[.75, 4.5], [.75, 4.5], [.75, 4.5]], note: 'used in the notebooks'},
- {id: 'your own model (type the prices above)', p: [[1, 4], [1, 4], [1, 4]], note: 'placeholder, edit the two price boxes'}
+ {id: 'gpt-6.2-astra', p: [[8, 40], [8, 40], [8, 40]]},
+ {id: 'gpt-6.2-sol', p: [[2, 10], [2, 10], [2, 10]]},
+ {id: 'gpt-6.1-terra', p: [[1, 5], [1, 5], [1, 5]]},
+ {id: 'gpt-6-luna', p: [[.1, .5], [.1, .5], [.1, .5]]},
+ {id: 'gpt-5.4-mini (OpenAI notebooks)', p: [[.75, 4.5], [.75, 4.5], [.75, 4.5]]},
+ {id: 'gpt-5.4-nano', p: [[.2, 1.25], [.2, 1.25], [.2, 1.25]]},
+ {id: 'gemini-4-argon', p: [[2, 10], [4, 20], [4, 20]]},
+ {id: 'gemini-3.8-flash (Gemini notebooks)', p: [[.75, 3.75], [.75, 3.75], [1.5, 7.5]]},
+ {id: 'gemini-3.5-flash-lite', p: [[.3, 2.5], [.3, 2.5], [.3, 2.5]]},
+ {id: 'gemini-3.1-flash-lite', p: [[.25, 1.5], [.25, 1.5], [.25, 1.5]]},
+ {id: 'gemini-3.1-pro-preview', p: [[2, 12], [2, 12], [2, 12]]},
+ {id: 'your own model (type the prices above)', p: [[1, 4], [1, 4], [1, 4]]}
 ];
 $('#kModel').innerHTML = MODELS.map((m, i) => `<option value="${i}">${m.id}</option>`).join('');
-const EMB_PRICE = 0.02;
+let CUR = 1; const usdRaw = usd; const money = n => CUR === 1 ? usdRaw(n) : 'AED ' + fmt(n * CUR, n * CUR < 0.01 && n > 0 ? 4 : 2);
 function setPrices() { const m = MODELS[+$('#kModel').value], w = +$('#kWin').value; $('#kIn').value = m.p[w][0]; $('#kOut').value = m.p[w][1]; renderCost(); }
 function costFor(pin, pout, calls, users, qpu, k, ct) {
   const inTok = calls * (330 + 400 + 30) + k * ct + 150 * (calls - 1), outTok = 120 + 40 * (calls - 1);
@@ -679,14 +728,40 @@ function costFor(pin, pout, calls, users, qpu, k, ct) {
 function renderCost() {
   const calls = +segVal('#kMode'), users = +$('#kU').value, qpu = +$('#kQ').value, k = +$('#kK').value, ct = +$('#kC').value, host = +$('#kHost').value || 0, dim = +segVal('#kDim');
   $('#oU').textContent = users; $('#oQ').textContent = qpu; $('#oKK').textContent = k; $('#oC').textContent = ct;
+  const EMB_PRICE = +$('#kEmb').value; CUR = +segVal('#kCur'); const stu = +$('#kS').value; $('#oS').textContent = stu;
   const c = costFor(+$('#kIn').value, +$('#kOut').value, calls, users, qpu, k, ct);
   const chunks = D.secs.length, embOnce = chunks * ct / 1e6 * EMB_PRICE, qEmb = users * qpu * 30 / 1e6 * EMB_PRICE, vecKB = chunks * dim * 4 / 1024;
-  $('#kStats').innerHTML = `<div class="stat"><b>${usd(c.perQ)}</b><span>per question</span></div><div class="stat good"><b>${usd(c.month + qEmb + host)}</b><span>per month, all-in</span></div><div class="stat"><b>${usd((c.month + qEmb + host) / users)}</b><span>per employee per month</span></div><div class="stat"><b>${fmt(c.inTok)} / ${fmt(c.outTok)}</b><span>tokens in / out per question</span></div><div class="stat"><b>${usd(embOnce)}</b><span>embed the policy once</span></div><div class="stat"><b>${fmt(vecKB, 0)} KB</b><span>vectors stored (${chunks} chunks x ${dim})</span></div><div class="stat"><b>${fmt(users * qpu)}</b><span>questions per month</span></div>`;
+  $('#kStats').innerHTML = `<div class="stat"><b>${money(c.perQ)}</b><span>per question</span></div><div class="stat good"><b>${money(c.month + qEmb + host)}</b><span>per month, all-in</span></div><div class="stat"><b>${money((c.month + qEmb + host) / users)}</b><span>per employee per month</span></div><div class="stat"><b>${fmt(c.inTok)} / ${fmt(c.outTok)}</b><span>tokens in / out per question</span></div><div class="stat"><b>${money(embOnce)}</b><span>embed the policy once</span></div><div class="stat"><b>${fmt(vecKB, 0)} KB</b><span>vectors stored (${chunks} chunks x ${dim})</span></div><div class="stat"><b>${fmt(users * qpu)}</b><span>questions per month</span></div><div class="stat am"><b>${money(c.perQ * stu * 60)}</b><span>bootcamp: ${stu} students x 60 questions</span></div>`;
   const w = +$('#kWin').value; let rows = '<tr><th>Model</th><th class="num">Input $/1M</th><th class="num">Output $/1M</th><th class="num">Per question</th><th class="num">Per month</th></tr>';
-  MODELS.forEach(m => { const x = costFor(m.p[w][0], m.p[w][1], calls, users, qpu, k, ct); rows += `<tr><td>${m.id}</td><td class="num">${m.p[w][0].toFixed(2)}</td><td class="num">${m.p[w][1].toFixed(2)}</td><td class="num">${usd(x.perQ)}</td><td class="num">${usd(x.month)}</td></tr>`; });
+  MODELS.forEach(m => { const x = costFor(m.p[w][0], m.p[w][1], calls, users, qpu, k, ct); rows += `<tr><td>${m.id}</td><td class="num">${m.p[w][0].toFixed(2)}</td><td class="num">${m.p[w][1].toFixed(2)}</td><td class="num">${money(x.perQ)}</td><td class="num">${money(x.month)}</td></tr>`; });
   $('#kTable').innerHTML = rows;
 }
-$('#kModel').onchange = $('#kWin').onchange = setPrices; ['kIn', 'kOut', 'kU', 'kQ', 'kK', 'kC', 'kHost'].forEach(id => $('#' + id).oninput = renderCost); seg('#kMode', renderCost); seg('#kDim', renderCost);
+$('#kModel').onchange = $('#kWin').onchange = setPrices; $('#kEmb').onchange = renderCost; ['kIn', 'kOut', 'kU', 'kQ', 'kK', 'kC', 'kHost', 'kS'].forEach(id => $('#' + id).oninput = renderCost); seg('#kMode', renderCost); seg('#kCur', renderCost); seg('#kDim', renderCost);
+
+/* ---------- LLM MODELS TAB ---------- */
+const LH = '<tr><th>Model ID</th><th>Use it for</th><th class="num">Input $/1M</th><th class="num">Output $/1M</th><th>Context</th><th>Note</th></tr>';
+const lrow = r => `<tr><td style="font-family:var(--mono);font-size:13px;color:var(--fg)">${r[0]}</td><td>${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`;
+$('#llmOA').innerHTML = LH + [
+ ['gpt-6.2-astra','Flagship, hardest tasks','8.00','40.00','1.05M','Newest flagship (API from 17 Nov 2026). Overkill for leave questions.'],
+ ['gpt-6.2-sol','Everyday workhorse, coding and agents','2.00','10.00','1.05M','Good choice if the SQL agent needs more accuracy.'],
+ ['gpt-6.1-terra','Fast and efficient','1.00','5.00','1.05M','Standard rate from price trackers; confirm on the official page.'],
+ ['gpt-6-luna','Most efficient, high volume','0.10','0.50','1.05M','Cheapest current model. Test the agent before class.'],
+ ['gpt-5.4-mini','Notebook default (tested)','0.75','4.50','400K','Still listed. Used in the Day 1 to Day 3 notebooks.'],
+ ['gpt-5.4-nano','Routing, extraction','0.20','1.25','400K','Some trackers mark it deprecated; check before use.']
+].map(lrow).join('');
+$('#llmGG').innerHTML = LH + [
+ ['gemini-4-argon','Newest family (Stable)','2.00 now, 4.00 from 1 Dec','10.00 now, 20.00 from 1 Dec','1M','Price doubles on 1 Dec 2026.'],
+ ['gemini-3.8-flash','Notebook default for Gemini (Stable)','0.75, then 1.50 from 1 Jan','3.75, then 7.50 from 1 Jan','1M','Introductory rate until 31 Dec 2026.'],
+ ['gemini-3.6-flash','Previous Flash (Stable)','0.75','3.75','1M','Same price as 3.8 Flash.'],
+ ['gemini-3.5-flash-lite','Budget tier (Stable)','0.30','2.50','1M','Google points new projects here for low cost.'],
+ ['gemini-3.1-flash-lite','Cheapest 3.x','0.25','1.50','1M','Stable.'],
+ ['gemini-3.1-pro-preview','Hard reasoning (Preview)','2.00','12.00','1M','4.00 and 18.00 above 200K tokens. Paid only.']
+].map(lrow).join('');
+$('#llmEmb').innerHTML = '<tr><th>Model ID</th><th>Provider</th><th class="num">$ per 1M tokens</th><th>Note</th></tr>' + [
+ ['text-embedding-3-small','OpenAI','0.02','Notebook default. 1536 dimensions.'],
+ ['text-embedding-3-large','OpenAI','0.13','3072 dimensions. Not needed for 13 chunks.'],
+ ['gemini-embedding-001','Google','0.15','Used in the Gemini notebooks. Different vector size, so use a separate index.']
+].map(r => `<tr><td style="font-family:var(--mono);font-size:13px;color:var(--fg)">${r[0]}</td><td>${r[1]}</td><td class="num">${r[2]}</td><td>${r[3]}</td></tr>`).join('');
 
 /* ---------- DATA ---------- */
 $('#docCards').innerHTML = [
@@ -707,7 +782,7 @@ $('#dict').innerHTML = '<tr><th>Table</th><th>Column</th><th>Type</th><th>Meanin
 
 /* ---------- GLOSSARY ---------- */
 const GL = [
- ['RAG','Retrieval Augmented Generation. Find the relevant text first, then let the model answer using only that text.','Core'],['LLM','Large language model. Here: GPT (gpt-5.4-mini). It writes the answer.','Core'],['Embedding','A list of numbers that captures the meaning of a text. Similar meaning, similar numbers.','Core'],['Dimension','How many numbers an embedding has. text-embedding-3-small gives 1,536 by default, and text-embedding-3-large gives 3,072. Both can be shortened.','Core'],['Vector','The embedding itself, seen as a point in space.','Core'],['Cosine similarity','A score for how close two vectors point. 1 is the same direction. Used to rank chunks.','Core'],['Chunk','One piece of a document, stored and searched on its own.','Chunking'],['Chunk size','How big each chunk is. Too big is noisy, too small cuts rules in half.','Chunking'],['Overlap','The end of one chunk repeated at the start of the next, so boundary sentences stay whole.','Chunking'],['Node','LlamaIndex name for a chunk with its metadata.','LlamaIndex'],['Metadata','Extra facts stored with a chunk, such as its section title. Helps citations.','Chunking'],['top_k','How many of the best chunks are sent to the model. Too few misses the rule, too many adds noise and cost.','Retrieval'],['Retriever','The part that finds the closest chunks for a question.','Retrieval'],['Vector database','A service that stores vectors and finds the closest ones fast. Here: Pinecone.','Pinecone'],['Index (Pinecone)','One collection of vectors, like a table. It has a fixed dimension and metric.','Pinecone'],['Metric','How closeness is measured in the index. We use cosine.','Pinecone'],['Serverless','A Pinecone index type with no machines to manage. You pay for what you use.','Pinecone'],['Upsert','Insert a vector, or update it if the id already exists.','Pinecone'],['Namespace','A partition inside an index, for example one per document set.','Pinecone'],['System prompt','The job description the model reads before every question. Sets scope, rules and style.','Prompting'],['Hallucination','A confident answer that is not supported by the data. RAG and refusal rules reduce it.','Prompting'],['Temperature','How random the output is. We use a low value (0.1 to 0.2) for steady answers.','Prompting'],['Token','A piece of text the model counts and bills. About 4 characters in English.','Cost'],['Context window','The most tokens a model can read in one call.','Cost'],['Tool','A Python function the agent may call. Its docstring tells the model when to use it.','Agent'],['Agent','A model that decides which tool to call, reads the result, and decides the next step.','Agent'],['FunctionAgent','LlamaIndex class that runs the agent loop with function tools.','LlamaIndex'],['Read-only','A tool or connection that can look but not change. DecoBot never writes.','Safety'],['Parameterised query','SQL with ? placeholders so user text is data, never part of the query.','Safety'],['Structured data','Rows and columns, such as the database. Answers "what is the number?".','Data'],['Unstructured data','Free text, such as the PDFs. Answers "what is the rule?".','Data'],['Synthetic data','Made up for training. Not real people, not legal advice.','Data'],['Colab Secret','A place in Google Colab to keep an API key outside the notebook.','Tools'],['Gradio','A Python library that turns a function into a web page with a chat window.','Tools'],['Hugging Face Space','A hosted app on Hugging Face. Free CPU Spaces can run a Gradio app.','Tools']
+ ['RAG','Retrieval Augmented Generation. Find the relevant text first, then let the model answer using only that text.','Core'],['LLM','Large language model. Here: gpt-5.4-mini (OpenAI) or gemini-3.8-flash (Gemini). It writes the answer.','Core'],['Embedding','A list of numbers that captures the meaning of a text. Similar meaning, similar numbers.','Core'],['Dimension','How many numbers an embedding has. text-embedding-3-small gives 1,536 by default, and text-embedding-3-large gives 3,072. Both can be shortened.','Core'],['Vector','The embedding itself, seen as a point in space.','Core'],['Cosine similarity','A score for how close two vectors point. 1 is the same direction. Used to rank chunks.','Core'],['Chunk','One piece of a document, stored and searched on its own.','Chunking'],['Chunk size','How big each chunk is. Too big is noisy, too small cuts rules in half.','Chunking'],['Overlap','The end of one chunk repeated at the start of the next, so boundary sentences stay whole.','Chunking'],['Node','LlamaIndex name for a chunk with its metadata.','LlamaIndex'],['Metadata','Extra facts stored with a chunk, such as its section title. Helps citations.','Chunking'],['top_k','How many of the best chunks are sent to the model. Too few misses the rule, too many adds noise and cost.','Retrieval'],['Retriever','The part that finds the closest chunks for a question.','Retrieval'],['Vector database','A service that stores vectors and finds the closest ones fast. Here: Pinecone.','Pinecone'],['Index (Pinecone)','One collection of vectors, like a table. It has a fixed dimension and metric.','Pinecone'],['Metric','How closeness is measured in the index. We use cosine.','Pinecone'],['Serverless','A Pinecone index type with no machines to manage. You pay for what you use.','Pinecone'],['Upsert','Insert a vector, or update it if the id already exists.','Pinecone'],['Namespace','A partition inside an index, for example one per document set.','Pinecone'],['System prompt','The job description the model reads before every question. Sets scope, rules and style.','Prompting'],['Hallucination','A confident answer that is not supported by the data. RAG and refusal rules reduce it.','Prompting'],['Temperature','How random the output is. We use a low value (0.1 to 0.2) for steady answers.','Prompting'],['Token','A piece of text the model counts and bills. About 4 characters in English.','Cost'],['Context window','The most tokens a model can read in one call.','Cost'],['Tool','A Python function the agent may call. Its docstring tells the model when to use it.','Agent'],['Agent','A model that decides which tool to call, reads the result, and decides the next step.','Agent'],['FunctionAgent','LlamaIndex class that runs the agent loop with function tools.','LlamaIndex'],['Read-only','A tool or connection that can look but not change. DecoBot never writes.','Safety'],['Parameterised query','SQL with ? placeholders so user text is data, never part of the query.','Safety'],['Structured data','Rows and columns, such as the database. Answers "what is the number?".','Data'],['Unstructured data','Free text, such as the PDFs. Answers "what is the rule?".','Data'],['Synthetic data','Made up for training. Not real people, not legal advice.','Data'],['Colab Secret','A place in Google Colab to keep an API key outside the notebook.','Tools'],['Gradio','A Python library that turns a function into a web page with a chat window.','Tools'],['Hugging Face Space','A hosted app on Hugging Face. Free CPU Spaces can run a Gradio app.','Tools']
 ];
 function renderGl() { const q = $('#gSearch').value.toLowerCase(); $('#gl').innerHTML = GL.filter(g => !q || (g[0] + g[1] + g[2]).toLowerCase().includes(q)).map(g => `<div class="term"><b>${esc(g[0])}</b><span>${esc(g[1])}</span><u>${g[2]}</u></div>`).join('') || '<div class="term"><span>No term found.</span></div>'; }
 $('#gSearch').oninput = renderGl; renderGl();
@@ -716,7 +791,7 @@ $('#stackCards').innerHTML = [
 ].map(s => `<div class="card ${s[3]}"><div class="tag">${s[1]}</div><h3>${s[0]}</h3><p>${s[2]}</p></div>`).join('');
 
 /* ---------- INIT ---------- */
-renderChunks(); renderRetr(); drawGrid(); renderFail(); setPrices(); $('#aQ').onchange();
+renderChunks(); renderRetr(); drawGrid(); renderFail(); $('#kModel').value = 4; setPrices(); $('#aQ').onchange();
 const secs = $$('section'); const links = $$('nav.top a');
 addEventListener('scroll', () => { let cur = ''; secs.forEach(s => { if (s.getBoundingClientRect().top < 140) cur = s.id; }); links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + cur)); }, {passive: true});
 
