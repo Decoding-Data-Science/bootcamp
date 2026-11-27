@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DecoBot HR Leave Agent Lab</title>
+<style>
+:root{--bg:#F5F7FA;--panel:#fff;--ink:#0B2540;--muted:#5B6B7B;--line:#D5DDE6;--accent:#0F6CBD;--soft:#E6F1FB;--good:#1B7F46;--bad:#B3261E;--warn:#8A5A00;
+--display:"Segoe UI",system-ui,sans-serif;--body:"Segoe UI",system-ui,sans-serif;--mono:Consolas,ui-monospace,monospace;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.55}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em}
+h1{font-size:27px;line-height:1.2}
+p{margin:0 0 10px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:22px 0 0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+header p.lead{color:var(--muted);max-width:74ch;margin:8px 0 14px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs a{text-decoration:none;color:var(--muted);padding:11px 18px;border:1px solid transparent;border-bottom:0;font-weight:500}
+.tabs a[aria-current="page"]{color:var(--ink);background:var(--bg);border-color:var(--line);margin-bottom:-1px}
+main{padding:24px 0 50px}
+.intro{max-width:78ch;margin-bottom:18px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:20px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);padding:16px}
+.card.key{border-top:3px solid var(--accent)}
+.lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.why{color:var(--muted);font-size:14px;margin-bottom:10px}
+textarea{width:100%;background:#FBFCFD;color:var(--ink);border:1px solid var(--line);font:inherit;padding:9px 11px;border-radius:0;line-height:1.5;min-height:78px;resize:vertical}
+textarea:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+button{font:inherit;font-size:13.5px;font-weight:500;background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:7px 13px;cursor:pointer;border-radius:0}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.pri:hover{background:#0B5799;color:#fff}
+button.sel{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.checks{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
+.checks li{display:flex;gap:9px;align-items:baseline;font-size:14px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:1px 6px;border:1px solid;flex:0 0 auto;min-width:56px;text-align:center}
+.tag.ok{color:var(--good);border-color:var(--good)}.tag.no{color:var(--bad);border-color:var(--bad)}.tag.mid{color:var(--warn);border-color:var(--warn)}
+.meter{height:8px;background:#E8EDF3;margin:8px 0 4px}
+.meter>i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.score{font-family:var(--display);font-size:34px;line-height:1}
+.score small{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:6px}
+.band{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+pre{background:#F1F5F9;border:1px solid var(--line);padding:12px;font-family:var(--mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:0;max-height:380px;overflow:auto}
+.ex{background:var(--soft);border-left:3px solid var(--accent);padding:10px 12px;font-size:14px;margin-top:10px}
+.ex b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.pill{font-family:var(--mono);font-size:11px;padding:1px 8px;border:1px solid var(--line);color:var(--muted)}
+.fld{margin-bottom:14px}.fld>span{display:block;font-weight:600;margin-bottom:4px}
+.note{color:var(--muted);font-size:13.5px}
+.guard{background:#FFF8E6;border:1px solid #E8CF8C;padding:10px 12px;font-size:14px}
+.guard b{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);display:block;margin-bottom:3px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;background:#F1F5F9}
+.tooltabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.mono{font-family:var(--mono);font-size:13px}
+.route{display:flex;gap:8px}.route input{flex:1;border:1px solid var(--line);padding:8px 10px;font:inherit}
+.big{font-family:var(--display);font-size:40px;line-height:1}
+footer{border-top:1px solid var(--line);padding:16px 0 28px;color:var(--muted);font-size:12.5px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}h1{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.meter>i{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">CPD UK AI Accelerator Bootcamp, 9th edition / Prompting playbook</div>
+<h1>DecoBot HR Leave Agent Lab</h1>
+<p class="lead">An employee asks DecoBot about leave. Start with the Clarity Canvas: who is this for, which policy is the latest, and who keeps it current. Then write the prompt and the tool descriptions from it. Canvas 10 points, prompt 20, tools 20: the agent's readiness score is out of 50.</p>
+<nav class="tabs" id="tabs" aria-label="Lab sections"></nav>
+</div></header>
+<main class="wrap" id="app"></main>
+<footer class="wrap">Decoding Data Science. Checks run in your browser and nothing is sent anywhere. Facts come from DDS Leave Policy v2 (DDS-HR-POL-001, synthetic).</footer>
+
+<script>
+"use strict";
+/* ============ CONTENT ============ */
+var PARTS=[
+{id:"role",name:"Role",why:"Who is the agent? One sentence sets its focus.",
+ ex:"You are DecoBot, the leave assistant for Decoding Data Science (DDS), answering employees in Dubai."},
+{id:"scope",name:"Scope",why:"What may it talk about? Without a boundary it answers anything.",
+ ex:"Help only with leave: balances, leave requests and what the DDS leave policy says. Nothing else. Today's date is 2026-11-29."},
+{id:"rules",name:"Rules (includes guardrails)",why:"Who is the user, where do facts come from, and what must it never do?",
+ ex:"If you do not know who you are talking to, ask for their full name first. Rules come from the policy tool and personal numbers come from the balance and request tools. Never invent or guess a number or a rule. Cite the policy section for every rule. If a question needs both a rule and a personal number, use both tools and combine them. If the policy does not cover a question, say so and point to People and Culture. Use today's date for notice checks."},
+{id:"format",name:"Format",why:"How should an answer look so an employee can act on it?",
+ ex:"Keep answers short and warm. Give the direct answer first, then the reason with the policy section."},
+{id:"refusals",name:"Refusals (includes guardrails)",why:"What must it say no to, and who does it point to instead?",
+ ex:"You are read-only. Refuse to submit, change or cancel leave, and tell the person to use the DDS HR portal. Refuse to share anyone else's balance or requests. Refuse any question that is not about leave and point to People and Culture."}
+];
+var TOOLS=[
+{id:"search_leave_policy",kind:"Documents (RAG)",purpose:"The rules: entitlements, notice periods, carry-over, certificates",
+ ex:{does:"Answers questions about leave rules from the DDS Leave Policy v2 (DDS-HR-POL-001).",
+     when:"someone asks what the policy says, such as notice, entitlement, carry-over of unused days, sick certificates or approval steps",
+     notFor:"any person's balance or requests, which it does not know",
+     inputs:"the question in plain English, for example 'notice for 10 working days of annual leave'",
+     output:"a short answer quoting the policy numbers and the section",
+     limits:"If the policy does not cover the question it replies 'Not found in the DDS leave policy.'"}},
+{id:"get_leave_balance",kind:"Data (SQL)",purpose:"One employee's days used, booked and left",
+ ex:{does:"Returns one employee's annual and sick leave totals, days taken, days booked and days remaining.",
+     when:"the person asks how many leave days they have used, booked or left",
+     notFor:"individual dates or request status, or what the policy says",
+     inputs:"the employee's full name, for example 'Aisha Khan'",
+     output:"annual and sick leave: total, taken, booked for the future and remaining",
+     limits:"Says no employee was found, or lists matching names and asks which one when several match."}},
+{id:"list_leave_requests",kind:"Data (SQL)",purpose:"One employee's requests with dates and status",
+ ex:{does:"Lists one employee's leave requests this year with type, dates, working days and status.",
+     when:"the person asks about past, upcoming, pending or approved leave requests and their status",
+     notFor:"balances or totals, and never for anyone but the person asking",
+     inputs:"the employee's full name, for example 'John Doe'",
+     output:"one line per request: leave type, start and end date, working days, status",
+     limits:"Says no requests were found for that name."}}
+];
+var FIELDS=[
+{id:"does",label:"What it does (one sentence)",ph:"Returns one employee's annual and sick leave balance."},
+{id:"when",label:"Use it when",ph:"the person asks how many days they have left"},
+{id:"notFor",label:"Do NOT use it for (guardrail)",ph:"what the policy says"},
+{id:"inputs",label:"Inputs and exact format (guardrail)",ph:"the employee's full name, for example 'Aisha Khan'"},
+{id:"output",label:"What it returns",ph:"total, taken, booked and remaining days"},
+{id:"limits",label:"Limits and warnings (guardrail)",ph:"Says no employee was found."}
+];
+/* routing simulator: questions and the tool a good agent should pick */
+var ROUTE=[
+{q:"What is the notice period for 10 or more working days of annual leave?",tool:"search_leave_policy"},
+{q:"How many annual leave days does Aisha Khan have left?",tool:"get_leave_balance"},
+{q:"Is my leave request for next week approved yet?",tool:"list_leave_requests"},
+{q:"Can I carry unused days into next year?",tool:"search_leave_policy"},
+{q:"How many sick days has Maria Garcia taken?",tool:"get_leave_balance"},
+{q:"Show my upcoming leave dates.",tool:"list_leave_requests"}
+];
+var STOP="a an the of to in on for and or is are was were be been it its this that these those with as at by from how what which who when where why do does did can could should would will you your i we they he she them my our their there then than not no per any all one some".split(" ");
+var KW=["leave","decobot","dds","hr","policy","balance","employee"];
+var CANVAS=[
+{id:"user",label:"1. Who is the user?",why:"One person, one need. Name who the bot serves and whose data it may show.",ph:"A DDS employee asking about their own leave.",
+ ex:"A DDS employee in Dubai asking about their own leave. Not the manager who approves it and not the HR admin who maintains the rules."},
+{id:"job",label:"2. What decision does the answer support?",why:"If you cannot name the decision, the bot will answer everything and help with nothing.",ph:"Can I take these days, and when can I start?",
+ ex:"Can I take these days off, and what is the earliest date I can start? The employee needs to know their balance and the notice rule."},
+{id:"source",label:"3. Source of truth and version",why:"Name the one document and the version. This is what 'latest' means.",ph:"DDS Leave Policy, version 2.",
+ ex:"DDS Leave Policy v2.0 (DDS-HR-POL-001), effective 1 July 2026. It replaces v1 in full. Personal numbers come from the HR leave database."},
+{id:"owner",label:"4. Who owns it?",why:"A document with no owner goes stale. Name a role, not a team email.",ph:"The Head of People and Culture.",
+ ex:"The Head of People and Culture owns the policy and reviews it every June. The HR team owns the leave database."},
+{id:"update",label:"5. How does the latest version get in?",why:"Someone must replace the old text, not just add the new one next to it.",ph:"When a new version is published, remove the old one and test again.",
+ ex:"When a new version is published, the owner sends it to the bot team. We add it, retire the old version the same day, rebuild the index, and re-run the test questions before it goes live."},
+{id:"scope",label:"6. In scope and out of scope",why:"Say what it will not do, so people are never surprised.",ph:"Leave only. Nothing about payroll.",
+ ex:"In scope: own balance, own requests, what the leave policy says. Out of scope: other people's data, payroll, contracts, and anything that is not leave."},
+{id:"escalation",label:"7. When the bot cannot answer",why:"The honest answer is 'I do not know, ask this person'.",ph:"Say so and point to People and Culture.",
+ ex:"Say it is not in the policy, do not guess, and point to People and Culture on the HR portal. Log the question so the owner can fix the gap."},
+{id:"success",label:"8. How do we know it works?",why:"A test you can run, with a number.",ph:"It answers ten test questions correctly.",
+ ex:"It answers ten test questions correctly, cites the section and version every time, and never shows another employee's data."}
+];
+function canvasChecks(){var c=S.canvas,L=[];
+ L.push({ok:has(c.user,["employee"])&&words(c.user)>=6,t:"User: names who the bot serves (the employee)."});
+ L.push({ok:has(c.user,["own","their own","themselves","only the"]),t:"User: says it shows only that person's own leave."});
+ L.push({ok:words(c.job)>=7&&has(c.job,["can i","when","how many","decide","whether","earliest"]),t:"Decision: names the question the employee needs answered."});
+ L.push({ok:has(c.source,["policy","pol-","document"])&&has(c.source,["v2","version","2.0","2026","latest","effective"]),t:"Source: names the document and its version or effective date."});
+ L.push({ok:has(c.owner,["head","owner","manager","director","hr team","people"])&&words(c.owner)>=5,t:"Owner: names a role who owns the policy."});
+ L.push({ok:has(c.update,["retire","remove","replace","archive","supersede","delete","old version"]),t:"Update: says the old version is retired, not left in the index."});
+ L.push({ok:has(c.update,["test","re-index","rebuild","review","check"]),t:"Update: says how the change is checked before it goes live."});
+ L.push({ok:has(c.scope,["out of scope","not ","nothing","never","only"])&&words(c.scope)>=8,t:"Scope: says what is out of scope."});
+ L.push({ok:has(c.escalation,["say so","not in","do not guess","point to","people","hr"])&&words(c.escalation)>=7,t:"Escalation: says what happens when the bot cannot answer."});
+ L.push({ok:/\d/.test(c.success)||has(c.success,["ten","five","every time","never"]),t:"Success: gives a test or number you can measure."});
+ return L}
+function canvasPts(){return passed(canvasChecks())}
+var KEY="decobot-prompt-lab-v2",S;
+function fresh(){var t={};TOOLS.forEach(function(x){t[x.id]={does:"Gets data.",when:"",notFor:"",inputs:"",output:"",limits:""}});
+ var c={};CANVAS.forEach(function(x){c[x.id]=""});return {canvas:c,prompt:{role:"You are a helpful assistant.",scope:"",rules:"",format:"",refusals:""},tools:t}}
+function load(){try{var r=localStorage.getItem(KEY);if(r){var s=JSON.parse(r);if(s&&s.prompt&&s.tools&&s.canvas)return s}}catch(e){}return fresh()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ============ HELPERS ============ */
+function esc(t){return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function words(t){return (String(t).trim().match(/\S+/g)||[]).length}
+function has(t,l){t=String(t).toLowerCase();return l.some(function(w){return t.indexOf(w)!==-1})}
+function toks(t){var o={};String(t).toLowerCase().replace(/[^a-z0-9_ ]/g," ").split(/\s+/).forEach(function(w){if(w.length>2&&STOP.indexOf(w)===-1)o[w]=1});return o}
+function jac(a,b){var ka=Object.keys(a),kb=Object.keys(b);if(!ka.length||!kb.length)return 0;var i=ka.filter(function(k){return b[k]}).length;return i/(ka.length+kb.length-i)}
+function tag(c,l){return '<span class="tag '+c+'">'+l+'</span>'}
+function checksHtml(L){return '<ul class="checks">'+L.map(function(c){return '<li>'+(c.ok?tag("ok","PASS"):tag("no","TO DO"))+'<span>'+esc(c.t)+'</span></li>'}).join("")+'</ul>'}
+function passed(L){return L.filter(function(c){return c.ok}).length}
+function band(n){return n>=18?"Production ready":n>=14?"Strong, tighten the gaps":n>=8?"Getting there":"Too vague, the agent will guess"}
+
+/* ============ CHECKS (prompt = exactly 20) ============ */
+function promptChecks(id,txt){var t=String(txt||""),L=[];
+ if(id==="role"){ /* 3 */
+  L.push({ok:/^\s*you are\b/i.test(t),t:"Starts with 'You are' and names the job."});
+  L.push({ok:words(t)>=6&&words(t)<=40,t:"Between 6 and 40 words (now "+words(t)+")."});
+  L.push({ok:has(t,KW)&&!/^\s*you are a helpful assistant\.?\s*$/i.test(t),t:"Names the HR leave domain, not only 'a helpful assistant'."});
+ }else if(id==="scope"){ /* 3 */
+  L.push({ok:has(t,["only","nothing else","limited to","restricted"]),t:"Draws a boundary, for example 'only' or 'nothing else'."});
+  L.push({ok:has(t,["leave","balance","request","policy"]),t:"Names an in-scope topic such as leave balances, requests or policy."});
+  L.push({ok:/20\d\d-\d\d-\d\d|today/i.test(t),t:"Gives today's date, so notice periods can be checked."});
+ }else if(id==="rules"){ /* 7 */
+  L.push({ok:has(t,["never invent","never guess","never make up","never estimate","do not invent","do not guess"]),t:"Guardrail: forbids inventing or guessing a number or rule."});
+  L.push({ok:has(t,["tool"])&&has(t,["policy","balance","request","database"]),t:"Says where facts come from: which tool for rules, which for personal numbers."});
+  L.push({ok:has(t,["cite","section","source","reference"]),t:"Asks for the policy section as the source."});
+  L.push({ok:has(t,["both","combine"]),t:"Says what to do when a question needs more than one tool."});
+  L.push({ok:has(t,["do not cover","does not cover","not found","say so","says so","not in the policy","missing"]),t:"Guardrail: says what to do when the policy does not cover a question."});
+  L.push({ok:has(t,["full name","who you are","identify","ask for their name"]),t:"Guardrail: asks who the person is before sharing personal data."});
+  L.push({ok:has(t,["today","date"]),t:"Tells the agent to use today's date for notice checks."});
+ }else if(id==="format"){ /* 3 */
+  L.push({ok:has(t,["short","brief","concise","under ","one line","two sentences","bullet"]),t:"Sets a length, such as short or a word limit."});
+  L.push({ok:has(t,["direct answer","answer first","first","then","step","list","table"]),t:"Says what comes first, for example the direct answer then the reason."});
+  L.push({ok:has(t,["section","reason","cite","source","policy"]),t:"Says to show the reason or the policy section."});
+ }else if(id==="refusals"){ /* 4 */
+  L.push({ok:has(t,["refuse","decline","do not","never","cannot","can't"]),t:"Guardrail: uses a clear refusal word."});
+  L.push({ok:has(t,["submit","change","cancel","approve","write","action","modify","read-only","read only"]),t:"Names an action to refuse, such as submit, change or cancel leave."});
+  L.push({ok:has(t,["anyone else","another employee","other employee","someone else","other people","others"]),t:"Guardrail: refuses to share another employee's data."});
+  L.push({ok:has(t,["portal","people and culture","people & culture","hr team","point to","refer"]),t:"Says who to point the person to instead, such as the HR portal or People and Culture."});
+ }return L}
+function allPrompt(){var a=[];PARTS.forEach(function(p){a=a.concat(promptChecks(p.id,S.prompt[p.id]))});return a}
+function assemble(){return PARTS.map(function(p){return String(S.prompt[p.id]||"").trim()}).filter(Boolean).join("\n")}
+
+function toolDesc(id){var f=S.tools[id],o=[],cl=function(s){return String(s||"").trim().replace(/\.$/,"")};
+ if(cl(f.does))o.push(String(f.does).trim());
+ if(cl(f.when))o.push("Use when "+cl(f.when)+".");
+ if(cl(f.notFor))o.push("Do NOT use for "+cl(f.notFor)+".");
+ if(cl(f.inputs))o.push("Input: "+cl(f.inputs)+".");
+ if(cl(f.output))o.push("Returns: "+cl(f.output)+".");
+ if(String(f.limits||"").trim())o.push(String(f.limits).trim());
+ return o.join(" ")}
+function toolChecks(id){var f=S.tools[id],d=toolDesc(id),n=words(d),L=[];
+ L.push({ok:words(f.does)>=6,t:"First sentence says what the tool does (at least 6 words)."});
+ L.push({ok:words(f.when)>=3,t:"Says when to use it."});
+ L.push({ok:words(f.notFor)>=2,t:"Guardrail: says what it is NOT for, which keeps neighbouring tools apart."});
+ L.push({ok:has(f.inputs,["'","\"","for example","full name","plain english","question"])&&words(f.inputs)>=3,t:"Guardrail: names the input and gives an example or exact format."});
+ L.push({ok:words(f.output)>=4,t:"Says what comes back."});
+ L.push({ok:words(f.limits)>=5,t:"Guardrail: says what it does when nothing is found."});
+ var worst=0,wid="";TOOLS.forEach(function(o){if(o.id===id)return;var od=toolDesc(o.id);if(words(od)<4)return;var j=jac(toks(d),toks(od));if(j>worst){worst=j;wid=o.id}});
+ L.push({ok:n>=25&&n<=120&&worst<0.4,t:worst>=0.4?"Overlaps with "+wid+" ("+Math.round(worst*100)+"% shared words). The agent may pick the wrong tool.":"Whole description is 25 to 120 words (now "+n+") and clearly different from the other tools."});
+ return L}
+/* 7 checks x 3 tools = 21; scaled to 20 */
+function toolsPts(){var a=0,t=0;TOOLS.forEach(function(x){var L=toolChecks(x.id);a+=passed(L);t+=L.length});return Math.round(20*a/t)}
+function promptPts(){return passed(allPrompt())}
+
+function copyText(text,note,pre){
+ function say(m){if(note){note.textContent=m;setTimeout(function(){if(note.textContent===m)note.textContent=""},3500)}}
+ function fb(){var ta=document.createElement("textarea");ta.value=text;ta.setAttribute("readonly","");ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand("copy")}catch(e){}document.body.removeChild(ta);
+  if(ok){say("Copied.");return}
+  if(pre){var r=document.createRange();r.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(r)}say("Text selected. Press Ctrl+C to copy.")}
+ try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){say("Copied.")},fb);else fb()}catch(e){fb()}}
+
+/* ============ VIEWS ============ */
+var toolSel=TOOLS[0].id;
+function tabsHtml(){var cur=(location.hash||"#canvas").slice(1),T=[["canvas","1. Clarity Canvas"],["prompt","2. System prompt"],["tools","3. Tool descriptions"],["route","4. Routing test"],["ready","5. Readiness"]];
+ document.getElementById("tabs").innerHTML=T.map(function(x){return '<a href="#'+x[0]+'"'+(cur===x[0]?' aria-current="page"':"")+'>'+x[1]+'</a>'}).join("")}
+function scoreBox(id,label,pts){return '<div class="card key"><div class="lab"><span>'+label+'</span></div><div class="score" id="'+id+'">'+pts+'<small>of 20</small></div><div class="meter"><i id="'+id+'m" style="width:'+(pts*5)+'%"></i></div><div class="band" id="'+id+'b">'+band(pts)+'</div></div>'}
+
+function vCanvas(){
+ var cards=CANVAS.map(function(x){return '<div class="card"><div class="lab"><span>'+x.label+'</span></div><div class="why">'+esc(x.why)+'</div><textarea style="min-height:60px" id="cf-'+x.id+'" data-canvas="'+x.id+'" placeholder="'+esc(x.ph)+'" aria-label="'+esc(x.label)+'">'+esc(S.canvas[x.id])+'</textarea><div class="row" style="margin-top:8px"><button type="button" data-act="cshow" data-v="'+x.id+'">Show a strong example</button></div><div id="cx-'+x.id+'"></div></div>'}).join("");
+ var pts=canvasPts();
+ return '<p class="intro">Clarity comes before any prompt. Who is the bot for, which document is the latest truth, and who keeps it current? DecoBot serves an employee asking about their own leave, and it must always use the latest policy. Answer the eight questions. Ten checks, ten points.</p><div class="grid"><div class="stack">'+cards+'</div><div class="stack" style="position:sticky;top:12px"><div class="card key"><div class="lab"><span>Canvas score</span></div><div class="score" id="c-score">'+pts+'<small>of 10</small></div><div class="meter"><i id="c-scorem" style="width:'+(pts*10)+'%"></i></div></div><div class="card"><div class="lab"><span>Checks</span></div><div id="c-checks">'+checksHtml(canvasChecks())+'</div></div><div class="row"><button type="button" data-act="call">Fill the whole canvas with the strong examples</button></div><div class="guard"><b>Why the owner and update rule matter</b>Policies change. If nobody owns the document and nobody retires the old version, the bot will quote a rule that no longer exists. That is a people problem before it is a technical one.</div></div></div>'}
+function refreshCanvas(){document.getElementById("c-checks").innerHTML=checksHtml(canvasChecks());var p=canvasPts();document.getElementById("c-score").innerHTML=p+"<small>of 10</small>";document.getElementById("c-scorem").style.width=(p*10)+"%"}
+function vPrompt(){
+ var cards=PARTS.map(function(p){return '<div class="card"><div class="lab"><span>'+p.name+'</span><span class="pill" id="pw-'+p.id+'">'+words(S.prompt[p.id])+' words</span></div><div class="why">'+esc(p.why)+'</div><textarea id="pt-'+p.id+'" data-part="'+p.id+'" aria-label="'+esc(p.name)+'">'+esc(S.prompt[p.id])+'</textarea><div id="pk-'+p.id+'">'+checksHtml(promptChecks(p.id,S.prompt[p.id]))+'</div><div class="row" style="margin-top:10px"><button type="button" data-act="pshow" data-v="'+p.id+'">Show a strong example</button></div><div id="px-'+p.id+'"></div></div>'}).join("");
+ return '<p class="intro">The system prompt is the written job description DecoBot reads before every conversation. Write it from your canvas. Fill the five parts. There are 20 checks in total and every one is worth one point. Guardrails are written into Rules and Refusals.</p><div class="grid"><div class="stack">'+cards+'</div><div class="stack" style="position:sticky;top:12px">'+scoreBox("p-score","Prompt score",promptPts())+
+ '<div class="card key"><div class="lab"><span>Your system prompt</span><span class="row"><span class="note" id="p-note"></span><button type="button" class="pri" data-act="pcopy">Copy prompt</button></span></div><pre id="p-out">'+esc(assemble()||"(empty)")+'</pre></div>'+
+ '<div class="guard"><b>Where guardrails live in the prompt</b>Scope: leave only, plus today\'s date.<br>Rules: ask who it is talking to, never invent, cite the section, say when the policy is silent.<br>Refusals: read-only, no one else\'s data, off-topic goes to People and Culture.</div></div></div>'}
+function refreshPrompt(id){document.getElementById("pk-"+id).innerHTML=checksHtml(promptChecks(id,S.prompt[id]));document.getElementById("pw-"+id).textContent=words(S.prompt[id])+" words";
+ var s=promptPts();document.getElementById("p-score").innerHTML=s+"<small>of 20</small>";document.getElementById("p-scorem").style.width=(s*5)+"%";document.getElementById("p-scoreb").textContent=band(s);document.getElementById("p-out").textContent=assemble()||"(empty)"}
+
+function vTools(){
+ var tabs=TOOLS.map(function(t){return '<button type="button" data-act="tool" data-v="'+t.id+'" class="mono '+(t.id===toolSel?"sel":"")+'">'+esc(t.id)+'</button>'}).join("");
+ var tool=TOOLS.filter(function(t){return t.id===toolSel})[0],f=S.tools[toolSel];
+ var flds=FIELDS.map(function(x){return '<div class="fld"><span>'+x.label+'</span><textarea style="min-height:56px" id="tf-'+x.id+'" data-field="'+x.id+'" placeholder="'+esc(x.ph)+'" aria-label="'+esc(x.label)+'">'+esc(f[x.id])+'</textarea><div class="row" style="margin-top:6px"><button type="button" data-act="fshow" data-v="'+x.id+'">Show a strong example</button></div><div id="fx-'+x.id+'"></div></div>'}).join("");
+ return '<p class="intro">The agent chooses a tool using only its name and description. It never sees the code. Describe each of the three tools so no two sound alike. Seven checks per tool, scaled to 20 points across the three.</p><div class="tooltabs">'+tabs+'</div><div class="grid"><div class="stack"><div class="card"><div class="lab"><span>'+esc(tool.kind)+'</span><span class="mono">'+esc(tool.id)+'</span></div><div class="why">'+esc(tool.purpose)+'</div>'+flds+'<div class="row"><button type="button" data-act="fall">Use all strong examples for this tool</button></div></div></div>'+
+ '<div class="stack" style="position:sticky;top:12px"><div class="card key"><div class="lab"><span>What the agent sees</span><span class="row"><span class="note" id="t-note"></span><button type="button" class="pri" data-act="tcopy">Copy description</button></span></div><pre id="t-out"></pre><div id="t-checks"></div></div>'+
+ '<div class="card"><div class="lab"><span>Overlap between tools</span><button type="button" data-act="tcopyall">Copy all three</button></div><div id="t-overlap"></div><p class="note" style="margin-top:8px">Under 25 percent shared words is distinct. Over 40 percent, the agent may choose the wrong tool.</p><p class="note" id="ta-note"></p></div>'+scoreBox("t-score","Tool score",toolsPts())+
+ '<div class="guard"><b>Where guardrails live in a tool</b>Do NOT use for: keeps each tool in its lane.<br>Input: exact format so the agent cannot pass nonsense.<br>Limits: what the tool says when nothing is found. The code is read-only.</div></div></div>'}
+function refreshTools(){
+ document.getElementById("t-out").textContent=toolSel+"\n\n"+(toolDesc(toolSel)||"(no description yet)");
+ document.getElementById("t-checks").innerHTML=checksHtml(toolChecks(toolSel));
+ var rows="";for(var i=0;i<TOOLS.length;i++)for(var j=i+1;j<TOOLS.length;j++){var da=toolDesc(TOOLS[i].id),db=toolDesc(TOOLS[j].id);var jv=(words(da)<4||words(db)<4)?null:jac(toks(da),toks(db));
+  var st=jv==null?tag("mid","EMPTY"):jv>=0.4?tag("no","OVERLAP"):jv>=0.25?tag("mid","WATCH"):tag("ok","DISTINCT");
+  rows+='<tr><td class="mono">'+esc(TOOLS[i].id)+'<br>'+esc(TOOLS[j].id)+'</td><td>'+(jv==null?"n/a":Math.round(jv*100)+"%")+'</td><td>'+st+'</td></tr>'}
+ document.getElementById("t-overlap").innerHTML="<table><tr><th>Pair</th><th>Shared</th><th>Verdict</th></tr>"+rows+"</table>";
+ var s=toolsPts();document.getElementById("t-score").innerHTML=s+"<small>of 20</small>";document.getElementById("t-scorem").style.width=(s*5)+"%";document.getElementById("t-scoreb").textContent=band(s)}
+
+/* routing simulator: scores each description against the question by shared words */
+function stem(w){return w.replace(/(ing|ed|es|s)$/,"")}
+function stoks(t){var o={};Object.keys(toks(t)).forEach(function(w){o[stem(w)]=1});return o}
+function routeWinner(q){var qt=stoks(q),ds=TOOLS.map(function(t){return {id:t.id,k:stoks(toolDesc(t.id)),n:words(toolDesc(t.id))}}),df={};
+ ds.forEach(function(d){Object.keys(d.k).forEach(function(w){df[w]=(df[w]||0)+1})});
+ var idf=function(w){return Math.log((ds.length+1)/((df[w]||0)+0.5))};
+ var best=ds.map(function(d){var sc=0;if(d.n>=4)Object.keys(qt).forEach(function(w){if(d.k[w])sc+=idf(w)});return {id:d.id,s:sc}});
+ var top=Math.max.apply(null,best.map(function(b){return b.s})),win=best.filter(function(b){return b.s===top});
+ return {top:top,win:win.length===1&&top>0?win[0].id:null,all:best}}
+function vRoute(){
+ var rows=ROUTE.map(function(r,i){var w=routeWinner(r.q),ok=w.win===r.tool;
+  return '<tr><td>'+esc(r.q)+'</td><td class="mono">'+esc(r.tool)+'</td><td class="mono">'+(w.win?esc(w.win):"tie or empty")+'</td><td>'+(ok?tag("ok","ROUTED"):tag("no","MISSED"))+'</td></tr>'}).join("");
+ var hit=ROUTE.filter(function(r){return routeWinner(r.q).win===r.tool}).length;
+ return '<p class="intro">The agent picks a tool by comparing the question with each description. This simulator does the same with shared words. Weak descriptions tie or pick the wrong tool. Fix the descriptions on tab 3 and come back.</p><div class="grid"><div class="card"><div class="lab"><span>Six test questions</span></div><table><tr><th>Question</th><th>Right tool</th><th>Simulator picks</th><th></th></tr>'+rows+'</table></div><div class="stack">'+
+ '<div class="card key"><div class="lab"><span>Routed correctly</span></div><div class="score">'+hit+'<small>of 6</small></div></div>'+
+ '<div class="card"><div class="lab"><span>Try your own question</span></div><div class="route"><input id="rq" type="text" value="Can I take 12 days in January?" aria-label="Question to route"><button type="button" class="pri" data-act="rtry">Route</button></div><div id="rres" class="note" style="margin-top:10px"></div></div>'+
+ '<div class="guard"><b>Why 12 days in January is the hard one</b>It needs the policy (30 calendar days notice for 10 or more working days) and the balance. A good prompt says to use both tools and combine them.</div></div></div>'}
+
+function vReady(){
+ var c=canvasPts(),p=promptPts(),t=toolsPts(),tot=c+p+t;
+ var gaps=allPrompt().filter(function(c){return !c.ok}).slice(0,6).map(function(c){return "<li>"+esc(c.t)+"</li>"}).join("");
+ return '<p class="intro">One score for the whole agent: 10 points for the canvas, 20 for the prompt, 20 for the tool descriptions.</p><div class="grid"><div class="stack"><div class="card key"><div class="lab"><span>Agent readiness</span></div><div class="big">'+tot+'<small style="font-size:14px;color:var(--muted);margin-left:8px">of 50</small></div><div class="meter"><i style="width:'+(tot*2)+'%"></i></div><div class="band">'+(tot>=45?"Ready for the notebook":tot>=35?"Close, fix the gaps below":tot>=20?"Half built":"Not ready, the agent will guess")+'</div></div>'+
+ '<div class="card"><div class="lab"><span>Still to fix in the prompt</span></div>'+(gaps?'<ul class="checks" style="padding-left:18px;list-style:disc">'+gaps+'</ul>':'<p class="note">Nothing. All 20 prompt checks pass.</p>')+'</div></div>'+
+ '<div class="stack"><div class="card"><div class="lab"><span>Breakdown</span></div><table><tr><th>Part</th><th>Points</th></tr><tr><td>Clarity Canvas</td><td>'+c+' / 10</td></tr><tr><td>System prompt</td><td>'+p+' / 20</td></tr><tr><td>Tool descriptions</td><td>'+t+' / 20</td></tr><tr><td><b>Total</b></td><td><b>'+tot+' / 50</b></td></tr></table></div>'+
+ '<div class="card"><div class="lab"><span>Take it to Colab</span></div><p class="note">Copy the prompt from tab 2 into SYSTEM_PROMPT in the Day 3 notebook. Copy each description from tab 3 into FunctionTool.from_defaults(description=...). Then ask the same six questions and watch which tool is called.</p></div></div></div>'}
+
+function render(){var id=(location.hash||"#canvas").slice(1);if(["prompt","tools","route","ready"].indexOf(id)<0)id="canvas";
+ document.getElementById("app").innerHTML=id==="canvas"?vCanvas():id==="tools"?vTools():id==="route"?vRoute():id==="ready"?vReady():vPrompt();tabsHtml();if(id==="tools")refreshTools()}
+window.addEventListener("hashchange",function(){render();window.scrollTo(0,0)});
+document.addEventListener("input",function(e){var t=e.target;
+ if(t.getAttribute("data-canvas")){S.canvas[t.getAttribute("data-canvas")]=t.value;save();refreshCanvas()}
+ else if(t.getAttribute("data-part")){S.prompt[t.getAttribute("data-part")]=t.value;save();refreshPrompt(t.getAttribute("data-part"))}
+ else if(t.getAttribute("data-field")){S.tools[toolSel][t.getAttribute("data-field")]=t.value;save();refreshTools()}});
+document.addEventListener("click",function(e){var b=e.target.closest("[data-act]");if(!b)return;var a=b.getAttribute("data-act"),v=b.getAttribute("data-v");
+ var P=function(x){return PARTS.filter(function(y){return y.id===x})[0]},T=function(){return TOOLS.filter(function(y){return y.id===toolSel})[0]};
+ var C=function(x){return CANVAS.filter(function(y){return y.id===x})[0]};
+ if(a==="cshow"){document.getElementById("cx-"+v).innerHTML='<div class="ex"><b>A strong example</b>'+esc(C(v).ex)+'</div><div class="row" style="margin-top:8px"><button type="button" class="pri" data-act="cuse" data-v="'+v+'">Use this example</button></div>';return}
+ if(a==="cuse"){S.canvas[v]=C(v).ex;save();document.getElementById("cf-"+v).value=C(v).ex;refreshCanvas();return}
+ if(a==="call"){CANVAS.forEach(function(x){S.canvas[x.id]=x.ex});save();render();return}
+ if(a==="pshow"){document.getElementById("px-"+v).innerHTML='<div class="ex"><b>A strong example</b>'+esc(P(v).ex)+'</div><div class="row" style="margin-top:8px"><button type="button" class="pri" data-act="puse" data-v="'+v+'">Use this example</button><button type="button" data-act="pexcopy" data-v="'+v+'">Copy example</button><span class="note" id="pxn-'+v+'"></span></div>';return}
+ if(a==="puse"){S.prompt[v]=P(v).ex;save();document.getElementById("pt-"+v).value=P(v).ex;refreshPrompt(v);return}
+ if(a==="pexcopy"){copyText(P(v).ex,document.getElementById("pxn-"+v));return}
+ if(a==="pcopy"){copyText(assemble(),document.getElementById("p-note"),document.getElementById("p-out"));return}
+ if(a==="tool"){toolSel=v;render();return}
+ if(a==="fshow"){document.getElementById("fx-"+v).innerHTML='<div class="ex"><b>A strong example</b>'+esc(T().ex[v])+'</div><div class="row" style="margin-top:8px"><button type="button" class="pri" data-act="fuse" data-v="'+v+'">Use this example</button><button type="button" data-act="fexcopy" data-v="'+v+'">Copy example</button><span class="note" id="fxn-'+v+'"></span></div>';return}
+ if(a==="fuse"){S.tools[toolSel][v]=T().ex[v];save();document.getElementById("tf-"+v).value=T().ex[v];refreshTools();return}
+ if(a==="fexcopy"){copyText(T().ex[v],document.getElementById("fxn-"+v));return}
+ if(a==="fall"){S.tools[toolSel]=JSON.parse(JSON.stringify(T().ex));save();render();return}
+ if(a==="tcopy"){copyText(toolDesc(toolSel),document.getElementById("t-note"),document.getElementById("t-out"));return}
+ if(a==="tcopyall"){copyText(TOOLS.map(function(t){return t.id+": "+toolDesc(t.id)}).join("\n\n"),document.getElementById("ta-note"));return}
+ if(a==="rtry"){var w=routeWinner(document.getElementById("rq").value);var s=w.all.map(function(x){return x.id+": "+Math.round(x.s*100)}).join("  |  ");document.getElementById("rres").textContent=(w.win?"Picks "+w.win:"Tie or no description yet")+"   ("+s+")";return}
+});
+S=load();if(!location.hash){try{history.replaceState(null,"","#canvas")}catch(e){}}render();
+</script>
+</body>
+</html>

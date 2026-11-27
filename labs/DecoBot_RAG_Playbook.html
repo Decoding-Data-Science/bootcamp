@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DecoBot RAG Playbook</title>
+<style>
+:root{--bg:#F5F7FA;--panel:#fff;--ink:#0B2540;--muted:#5B6B7B;--line:#D5DDE6;--accent:#0F6CBD;--soft:#E6F1FB;--good:#1B7F46;--bad:#B3261E;--warn:#8A5A00;--display:"Segoe UI",system-ui,sans-serif;--body:"Segoe UI",system-ui,sans-serif;--mono:Consolas,ui-monospace,monospace;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.55}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em}
+h1{font-size:27px;line-height:1.2}h3{font-size:16px}
+p{margin:0 0 10px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:22px 0 0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+header p.lead{color:var(--muted);max-width:76ch;margin:8px 0 14px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs a{text-decoration:none;color:var(--muted);padding:11px 16px;border:1px solid transparent;border-bottom:0;font-weight:500}
+.tabs a[aria-current="page"]{color:var(--ink);background:var(--bg);border-color:var(--line);margin-bottom:-1px}
+main{padding:24px 0 50px}
+.intro{max-width:80ch;margin-bottom:18px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);padding:16px}
+.card.key{border-top:3px solid var(--accent)}
+.lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.note{color:var(--muted);font-size:13.5px}
+button,select{font:inherit;font-size:13.5px;font-weight:500;background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:7px 12px;cursor:pointer;border-radius:0}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.sel{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+button:focus-visible,select:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;padding:1px 6px;border:1px solid;display:inline-block;min-width:54px;text-align:center}
+.tag.ok{color:var(--good);border-color:var(--good)}.tag.no{color:var(--bad);border-color:var(--bad)}.tag.mid{color:var(--warn);border-color:var(--warn)}
+.meter{height:8px;background:#E8EDF3;margin:8px 0 4px}.meter>i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.score{font-family:var(--display);font-size:34px;line-height:1}.score small{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:6px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;background:#F1F5F9}
+.chunk{border:1px solid var(--line);background:#FBFCFD;padding:9px 11px;font-size:13px;line-height:1.5;margin-top:8px}
+.chunk .h{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;margin-bottom:4px}
+.chunk.hit{border-color:var(--good);background:#F1FAF4}
+mark{background:#FFE9A8;padding:0 1px}
+.guard{background:#FFF8E6;border:1px solid #E8CF8C;padding:10px 12px;font-size:14px}
+.guard b,.ex b{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:3px}
+.guard b{color:var(--warn)}
+.ex{background:var(--soft);border-left:3px solid var(--accent);padding:10px 12px;font-size:14px}.ex b{color:var(--accent)}
+.step{border:1px solid var(--line);background:var(--panel);padding:14px}
+.step .n{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em}
+.step h3{margin:2px 0 6px}
+.kv{font-size:13.5px;margin:4px 0}.kv b{color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:block}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.chk input{margin-top:4px;width:17px;height:17px;flex:0 0 auto}
+.mono{font-family:var(--mono);font-size:13px}
+footer{border-top:1px solid var(--line);padding:16px 0 28px;color:var(--muted);font-size:12.5px}
+@media(max-width:900px){.grid,.g3{grid-template-columns:1fr}h1{font-size:22px}}
+@media(prefers-reduced-motion:reduce){.meter>i{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">CPD UK AI Accelerator Bootcamp, 9th edition / RAG playbook</div>
+<h1>DecoBot RAG Playbook</h1>
+<p class="lead">A RAG bot is only as good as the document behind it. This playbook runs on the real DDS Leave Policy v2. You will see how chunking changes what the bot finds, why only the latest policy may be searchable, how RAG fails, and who must keep the knowledge current.</p>
+<nav class="tabs" id="tabs" aria-label="Playbook sections"></nav>
+</div></header>
+<main class="wrap" id="app"></main>
+<footer class="wrap">Decoding Data Science. The search here is a simple word-match model in your browser, so you can see the idea without a key. Real RAG uses embeddings. Policy text: DDS Leave Policy v2, DDS-HR-POL-001 (synthetic).</footer>
+<script>
+"use strict";
+var POLICY="Leave Policy - Decoding Data Science\nDocument ID: DDS-HR-POL-001 | Version 2.0 | Effective date: 1 July 2026\nInternal - Synthetic demo document for AI training purposes. Not legal advice.\nThis policy defines all leave entitlements at DDS, how leave accrues, how to request it, and how requests are\napproved. It replaces Leave Policy v1 (March 2026) in full. Where UAE Federal Decree-Law No. 33 of 2021 (the UAE\nLabour Law) provides a greater benefit, the law prevails. Note: this is a synthetic, training-friendly policy created for\ndemos, onboarding simulations, and HR-chatbot prototypes. It is not legal advice.\n1. Leave Entitlements at a Glance\nAnnual leave: 22 working days per year, full pay, 7 calendar days minimum notice (see section 3.4), no evidence\nrequired. Sick leave: 15 working days per year at full pay (then per section 4.4), notify same day within 1 hour of start\ntime, medical certificate required for 2+ consecutive days. Maternity leave: 60 calendar days, full pay, 30 calendar\ndays' notice before expected date, medical documentation required. Paternity leave: 5 working days within 6 months\nof birth, full pay, 30 calendar days' notice where foreseeable, birth certificate required. Parental leave (additional): 5\nworking days per parent within 6 months of birth, full pay, 14 calendar days' notice, birth certificate required.\nBereavement leave: 5 working days (spouse/child/parent) or 3 working days (sibling/grandparent), full pay, notify as\nsoon as possible, documentation may be requested. Marriage leave: 3 working days (once during employment), full\npay, 14 calendar days' notice, marriage certificate required. Study leave: 10 working days per year (2+ years of\nservice, enrolled at an accredited UAE institution), full pay, 14 calendar days' notice, exam schedule/enrollment proof\nrequired. Hajj leave: up to 30 calendar days (once during employment), unpaid, 60 calendar days' notice, no evidence\nrequired. Unpaid leave: up to 30 calendar days per year, case-by-case, unpaid, 30 calendar days' notice, manager\nand HR approval required. Public holidays: per the official UAE calendar, full pay, not deducted from annual leave.\n2. Definitions\nLeave year: 1 January to 31 December. Working day: Monday to Friday, excluding UAE public holidays. Calendar\nday: any day, including weekends and public holidays. Immediate family: spouse, child, or parent. Leave system: the\nDDS HR portal where all leave is requested, approved, and tracked.\n3. Annual Leave\n3.1 Entitlement Full-time employees are entitled to 22 working days of paid annual leave per leave year. Part-time\nemployees receive a pro-rata entitlement based on contracted hours. Employees who join or leave mid-year receive\na pro-rata entitlement for that year.\n3.2 Accrual Annual leave accrues at 1.83 working days per completed calendar month of service. During the\nprobation period, leave accrues normally; accrued days may be used during probation with line-manager approval.\n3.3 Booking limits\n- The maximum single block of annual leave is 15 consecutive working days. Longer blocks require CEO approval.\n- At least 5 of the 22 days must be taken as one continuous block of 5 working days each year, to support genuine\nrest.\n- Leave may be taken in half-day units at minimum.\n3.4 Notice periods for annual leave requests 1-2 working days requested: 7 calendar days' notice. 3-9 working days\nrequested: 14 calendar days' notice. 10 or more working days requested: 30 calendar days' notice. Managers\nrespond to leave requests within 3 business days. Employees should not book non-refundable travel before approval\nis confirmed in the leave system.\n\n3.5 Peak periods During flagship delivery windows (major bootcamps, the annual conference season, and product\nlaunches), approvals may be restricted. HR publishes restricted weeks at the start of each quarter. Requests in\nrestricted weeks require Head-of-Department approval.\n4. Carry-Over, Expiry and Encashment\n4.1 Carry-over A maximum of 10 unused annual-leave days may be carried into the next leave year. Carry-over is\nautomatic; no approval is needed.\n4.2 Expiry Carried-over days must be used by 31 March (end of Q1) of the new leave year. Any carried-over days not\nused by 31 March expire without compensation.\n4.3 Encashment Unused annual leave is not paid out during employment. On termination of employment, accrued but\nunused annual leave for the current year is paid out at the employee's basic salary rate, in line with UAE Labour Law.\n5. Sick Leave\n5.1 Entitlement Employees receive 15 working days of fully paid sick leave per leave year, available after completion\nof the probation period.\n5.2 Notification\n- Notify your line manager within 1 hour of your normal start time on the first day of absence (message or call).\n- Log the absence in the leave system on the day of return, or earlier if able.\n5.3 Medical certificates A medical certificate from a licensed practitioner is required for any absence of 2 or more\nconsecutive working days, and may be requested for shorter or repeated absences where a pattern suggests misuse.\n5.4 Extended illness If an illness continues beyond the 15 fully paid days, additional sick leave follows the UAE\nLabour Law structure within the same leave year: up to 30 further calendar days at half pay, then up to 45 further\ncalendar days unpaid, subject to medical documentation. HR manages extended-illness cases confidentially with the\nemployee.\n5.5 Partial working If an employee is unwell but able to work reduced hours, this may be agreed with the line\nmanager. Health always takes priority; nobody is expected to work while genuinely unwell.\n6. Public Holidays\n- DDS observes the official UAE public-holiday calendar for Dubai-based employees. HR publishes the calendar each\nJanuary.\n- Public holidays are paid and are not deducted from the annual-leave balance.\n- If a public holiday falls within an approved period of annual leave, that day is not counted as an annual-leave day.\n- Employees contracted outside the UAE observe the public holidays of their contract location.\n- Where business-critical operations (live events, launches) require work on a public holiday, the employee receives a\nsubstitute day off in lieu, to be taken within 60 days.\n7. Maternity, Paternity and Parental Leave\n7.1 Maternity leave\n- 60 calendar days at full pay. This exceeds the UAE statutory minimum as an enhanced DDS benefit.\n- Notify HR at least 30 calendar days before the expected date of leave, with medical documentation.\n- Leave may begin up to 30 days before the expected delivery date.\n\n- An additional period of up to 45 calendar days unpaid may be taken for medical reasons related to the pregnancy or\ndelivery, with a medical certificate.\n7.2 Nursing breaks For 6 months following return from maternity leave, the employee is entitled to one paid nursing\nbreak of 1 hour per day, scheduled flexibly with the line manager.\n7.3 Paternity leave Fathers receive 5 working days at full pay, to be taken within 6 months of the child's birth,\nconsecutively or split. Provide notice 30 calendar days ahead where foreseeable.\n7.4 Parental leave (additional) In addition to maternity/paternity leave, each parent may take 5 working days of paid\nparental leave within 6 months of the birth, in line with UAE Labour Law.\n7.5 Adoption Employees adopting a child under the age of 5 receive the same entitlements as in sections 7.1-7.4,\nmeasured from the date of placement.\n7.6 Return to work Managers must agree a written transition plan before leave begins and a re-onboarding plan for\nthe return. Returning parents come back to the same role or an equivalent role on the same terms.\n8. Other Leave Types\n8.1 Bereavement (compassionate) leave 5 working days at full pay for the death of a spouse, child, or parent; 3\nworking days at full pay for the death of a sibling, grandparent, or grandchild. Notify your manager as soon as\npossible; documentation may be requested. Additional unpaid leave may be approved case-by-case.\n8.2 Marriage leave 3 working days at full pay, once during employment, taken within 30 days of the marriage. Provide\n14 calendar days' notice and a marriage certificate.\n8.3 Study and exam leave Employees with 2 or more years of service who are enrolled at an accredited UAE\neducational institution receive 10 working days of paid study leave per year for examinations, per UAE Labour Law.\nProvide the exam schedule 14 calendar days ahead.\n8.4 Hajj leave Muslim employees may take up to 30 calendar days of unpaid leave once during their employment to\nperform Hajj. Request 60 calendar days in advance so coverage can be planned.\n8.5 Unpaid leave\n- Up to 30 calendar days per leave year, approved case-by-case by the line manager and HR.\n- Annual leave must be exhausted first unless HR agrees otherwise.\n- Unpaid leave may affect payroll, benefits accrual, and visa arrangements; HR will confirm the impact in writing\nbefore approval.\n9. Religious Observance and Ramadan Working Hours\n- During Ramadan, daily working hours are reduced by 2 hours for all employees, per UAE regulation.\n- Teams schedule meetings considerately around fasting and prayer times.\n- Additional flexibility (shifted hours, remote days) can be agreed with the line manager where the role allows.\n10. How to Request Leave (Workflow)\nStep 1: Employee submits the request in the leave system with dates, leave type, and a short coverage plan\n(deliverables, who covers, key deadlines), per the notice table in section 3.4. Step 2: Line manager reviews and\napproves/declines with a reason, within 3 business days. Step 3: HR runs an automatic compliance check for\nbalance, carry-over expiry, and restricted weeks. Step 4: Employee notifies affected stakeholders and hands over\nclient-facing commitments before leave starts. Step 5: For emergency leave, the employee notifies their manager\nimmediately by any channel, then submits the request retroactively within 48 hours. Approved leave appears in the\nshared team calendar. Cancelling approved leave restores the days to the employee's balance automatically.\n\n11. Misuse and Compliance\n- Misrepresenting sickness, falsifying certificates, or working a second job while on sick leave are treated as\nmisconduct under the DDS Disciplinary Policy.\n- DDS may request documentation where reasonable and lawful.\n- Managers may not pressure employees to cancel or shorten approved leave except in genuine business\nemergencies, and any such case must be reported to HR.\n12. Governance\n- Policy owner: Head of People & Culture, DDS.\n- Review cycle: annually, each June, or earlier if UAE labour regulations change.\n- Precedence: where an employment contract or UAE Labour Law grants a greater benefit, that provision prevails\nover this policy.\n- Questions: contact People & Culture via the HR portal, or ask DecoBot, the DDS HR assistant.\nVersion history: v1.0 (March 2026) initial synthetic policy. v2.0 (July 2026) full rewrite with fixed entitlements, notice\ntables, carry-over and expiry rules, extended parental provisions, and workflow SLAs.\n";
+/* ===== text helpers ===== */
+var STOP="a an the of to in on for and or is are was were be been it its this that these those with as at by from how what which who when where why do does did can could should would will you your i we they he she them my our their there then than not no per any all one some may must if so into".split(" ");
+function norm(t){return String(t).replace(/\s+/g," ").trim()}
+function stem(w){return w.replace(/(ing|ed|es|s)$/,"")}
+function tokens(t){return (String(t).toLowerCase().match(/[a-z0-9]+/g)||[]).filter(function(w){return STOP.indexOf(w)<0&&w.length>1}).map(stem)}
+function esc(t){return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function tag(c,l){return '<span class="tag '+c+'">'+l+'</span>'}
+var FULL=POLICY;
+/* ===== chunking ===== */
+function bySection(){return FULL.split(new RegExp("^(?=\\d{1,2}\\.\\s+[A-Z])","m")).map(function(x){return x.trim()}).filter(Boolean)}
+function byClause(){return FULL.split(new RegExp("^(?=\\d{1,2}\\.(?:\\d\\s+|\\s+)[A-Z])","m")).map(function(x){return x.trim()}).filter(Boolean)}
+function fixed(size,ov){var t=FULL.replace(/\n/g," "),out=[],i=0;while(i<t.length){out.push(t.slice(i,i+size).trim());if(i+size>=t.length)break;i+=Math.max(20,size-ov)}return out}
+function makeChunks(st,ov){if(st==="section")return bySection();if(st==="clause")return byClause();return fixed(parseInt(st,10),ov)}
+function heading(c){var m=c.match(/^\s*(\d{1,2}(?:\.\d)?)[\s.]/);return m?"Section "+m[1]:"Fixed slice"}
+/* ===== tiny retriever: tf-idf cosine ===== */
+function buildIndex(chunks){var docs=chunks.map(function(c){var tf={};tokens(c).forEach(function(w){tf[w]=(tf[w]||0)+1});return tf}),df={};
+ docs.forEach(function(d){Object.keys(d).forEach(function(w){df[w]=(df[w]||0)+1})});
+ var N=docs.length,idf=function(w){return Math.log((N+1)/((df[w]||0)+1))+1};
+ var vecs=docs.map(function(d){var v={},n=0;Object.keys(d).forEach(function(w){var x=(1+Math.log(d[w]))*idf(w);v[w]=x;n+=x*x});return {v:v,n:Math.sqrt(n)||1}});
+ return {chunks:chunks,vecs:vecs,idf:idf}}
+function search(ix,q,k){var qt={};tokens(q).forEach(function(w){qt[w]=(qt[w]||0)+1});var qv={},qn=0;
+ Object.keys(qt).forEach(function(w){var x=(1+Math.log(qt[w]))*ix.idf(w);qv[w]=x;qn+=x*x});qn=Math.sqrt(qn)||1;
+ var sc=ix.vecs.map(function(d,i){var s=0;Object.keys(qv).forEach(function(w){if(d.v[w])s+=qv[w]*d.v[w]});return {i:i,s:s/(qn*d.n)}});
+ sc.sort(function(a,b){return b.s-a.s});return sc.slice(0,k)}
+/* ===== test questions ===== */
+var QS=[
+{q:"How much notice do I need to take 10 working days of annual leave?",need:["10 or more working days requested: 30 calendar days"],silent:false},
+{q:"How many unused days can I carry over and when do they expire?",need:["maximum of 10 unused","31 March"],silent:false},
+{q:"How many sick days are fully paid, and what happens after that?",need:["15 working days of fully paid","30 further calendar days at half pay"],silent:false},
+{q:"Do I need a medical certificate for two days off sick?",need:["2 or more consecutive working days"],silent:false},
+{q:"How long is the probation period at DDS?",need:[],silent:true}
+];
+function evalQ(ix,q,k){var res=search(ix,q.q,k),texts=res.map(function(r){return norm(ix.chunks[r.i])});
+ var found=q.need.map(function(p){return texts.some(function(t){return t.indexOf(p)>=0})});
+ return {res:res,found:found,ok:q.need.length?found.every(Boolean):false}}
+/* ===== state ===== */
+var KEY="decobot-rag-playbook-v1",S;
+function load(){try{var r=JSON.parse(localStorage.getItem(KEY));if(r&&r.chk)return r}catch(e){}return {chk:{}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var CH={st:"section",ov:0,k:3,qi:0};
+var LP={v1:true,filter:false,newest:false};
+
+/* ===== TAB 1: pipeline ===== */
+var PIPE=[
+{n:"1",h:"Know the user",d:"An employee asking about their own leave.",r:"Answers that fit nobody.",o:"Product owner",dec:"Who asks, what decision do they make, whose data may they see?"},
+{n:"2",h:"Pick the source of truth",d:"DDS Leave Policy v2, effective 1 July 2026. It replaces v1 in full.",r:"Two versions both searchable.",o:"Head of People and Culture",dec:"Which single document is the latest, and who says so?"},
+{n:"3",h:"Clean and chunk",d:"Split the text so each chunk holds one complete rule.",r:"A rule cut in half, or a section with the wrong cross-reference.",o:"Bot builder with policy owner",dec:"By section, by clause or by size? How much overlap?"},
+{n:"4",h:"Index with metadata",d:"Store each chunk with version, section and effective date.",r:"No way to tell old from new.",o:"Bot builder",dec:"What labels let us filter to the latest?"},
+{n:"5",h:"Retrieve",d:"Find the top chunks for the question. Look at them before blaming the model.",r:"Right document, wrong chunk. Vague follow-ups.",o:"Bot builder",dec:"How many chunks (top-k)? Rewrite the question first?"},
+{n:"6",h:"Answer with guardrails",d:"Answer only from the chunks, cite the section and version, say 'not found' when silent.",r:"A confident number that is not in the document.",o:"Bot builder and policy owner",dec:"What does the bot say when the policy is silent?"}
+];
+function vPipe(){
+ var cards=PIPE.map(function(p){return '<div class="step"><div class="n">STEP '+p.n+'</div><h3>'+esc(p.h)+'</h3><p class="note">'+esc(p.d)+'</p><div class="kv"><b>Decision</b>'+esc(p.dec)+'</div><div class="kv"><b>What goes wrong</b>'+esc(p.r)+'</div><div class="kv"><b>Owner</b>'+esc(p.o)+'</div></div>'}).join("");
+ return '<p class="intro">RAG is a pipeline, and every step has an owner. Steps 1 and 2 are business clarity: who is this for and which document is the latest truth. Steps 3 to 6 are the technical work. Most failures start in steps 1 and 2.</p><div class="g3">'+cards+'</div><div class="guard" style="margin-top:16px"><b>The one rule to remember</b>The bot can only be as current as the document in the index. If the policy changes and nobody updates the index, the bot is confidently out of date.</div>'}
+
+/* ===== TAB 2: chunking ===== */
+function vChunk(){
+ var chunks=makeChunks(CH.st,CH.ov),ix=buildIndex(chunks);
+ var opts=[["section","By section (1 to 12)"],["clause","By clause (3.1, 3.4, 5.4 ...)"],["300","Fixed 300 characters"],["600","Fixed 600 characters"],["1200","Fixed 1200 characters"]];
+ var rows=QS.map(function(q,i){var e=evalQ(ix,q,CH.k);var st=q.silent?tag("mid","SILENT"):e.ok?tag("ok","FOUND"):tag("no","MISSED");
+  return '<tr><td><button type="button" data-act="q" data-v="'+i+'" class="'+(i===CH.qi?"sel":"")+'" style="text-align:left">'+esc(q.q)+'</button></td><td>'+st+'</td></tr>'}).join("");
+ var found=QS.filter(function(q){return !q.silent&&evalQ(ix,q,CH.k).ok}).length;
+ var q=QS[CH.qi],e=evalQ(ix,q,CH.k);
+ var cards=e.res.map(function(r,j){var txt=norm(chunks[r.i]),hit=q.need.some(function(p){return txt.indexOf(p)>=0}),html=esc(txt);
+  q.need.forEach(function(p){html=html.split(esc(p)).join("<mark>"+esc(p)+"</mark>")});
+  return '<div class="chunk '+(hit?"hit":"")+'"><div class="h"><span>#'+(j+1)+' '+heading(chunks[r.i])+'</span><span>match '+r.s.toFixed(2)+(hit?" , has the answer":"")+'</span></div>'+html+'</div>'}).join("");
+ var need=q.need.length?'<div class="note" style="margin-top:8px">The answer needs: '+q.need.map(function(p,j){return (e.found[j]?tag("ok","IN"):tag("no","OUT"))+' <span class="mono">'+esc(p)+'</span>'}).join(" ; ")+'</div>':'<div class="guard" style="margin-top:8px"><b>The document is silent</b>Probation is never defined in this policy. Retrieval still returns chunks, so the bot needs a rule: "If the answer is not in the excerpts, say so." Look at the match scores: they are low, and still not zero.</div>';
+ return '<p class="intro">Chunking decides what the retriever can find. Pick a strategy, then click each question. A green chunk contains the answer. A small top-k or a rule cut in half makes the bot miss. This search is a simple word-match model, so the idea is visible without a key.</p><div class="grid"><div class="stack"><div class="card"><div class="lab"><span>Settings</span></div><div class="row"><label>Strategy <select id="st">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===CH.st?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></label>'+
+ (/^\d+$/.test(CH.st)?'<label>Overlap <select id="ov">'+[0,50,100,200].map(function(v){return '<option value="'+v+'"'+(v===CH.ov?" selected":"")+'>'+v+' chars</option>'}).join("")+'</select></label>':'')+
+ '<label>Top-k <select id="kk">'+[1,2,3,5].map(function(v){return '<option value="'+v+'"'+(v===CH.k?" selected":"")+'>'+v+'</option>'}).join("")+'</select></label></div><p class="note" style="margin-top:8px">'+chunks.length+' chunks, average '+Math.round(chunks.reduce(function(a,c){return a+c.length},0)/chunks.length)+' characters.</p></div>'+
+ '<div class="card"><div class="lab"><span>Five test questions</span></div><table><tr><th>Question</th><th>Result</th></tr>'+rows+'</table></div></div><div class="stack" style="position:sticky;top:12px"><div class="card key"><div class="lab"><span>Found</span></div><div class="score">'+found+'<small>of 4 answerable questions</small></div></div><div class="card"><div class="lab"><span>What the retriever returned</span></div><p style="margin:0" class="mono">'+esc(q.q)+'</p>'+cards+need+'</div>'+
+ '<div class="ex"><b>Try this</b>Select "Fixed 300 characters" with top-k 1 and watch the sick leave question fail. Then try "By clause" with top-k 3. A rule that lives in one clause survives. A rule split across two chunks needs a larger top-k or overlap.</div></div></div>'}
+
+/* ===== TAB 3: latest policy ===== */
+var V2=function(){return byClause().filter(function(c){return /^(3\.1|4\.1|4\.2)\b/.test(c)}).map(function(c){return {t:norm(c),v:"2.0",eff:"2026-07-01"}})};
+var V1=[{t:"3. Annual Leave (Leave Policy v1.0, March 2026) Full-time employees are entitled to 20 working days of paid annual leave per leave year. Annual leave is booked in the leave system.",v:"1.0",eff:"2026-03-01"},
+ {t:"4. Carry-Over (Leave Policy v1.0, March 2026) A maximum of 5 unused annual-leave days may be carried into the next leave year and must be used by 31 March.",v:"1.0",eff:"2026-03-01"}];
+function vLatest(){
+ var pool=V2().concat(LP.v1?V1:[]);
+ if(LP.filter)pool=pool.filter(function(c){return c.v==="2.0"});
+ var ix=buildIndex(pool.map(function(c){return c.t})),q="How many annual leave days do I get and how many can I carry over?";
+ var res=search(ix,q,3);
+ if(LP.newest)res.sort(function(a,b){return pool[b.i].eff.localeCompare(pool[a.i].eff)||b.s-a.s});
+ var vs={};res.forEach(function(r){vs[pool[r.i].v]=1});var mixed=Object.keys(vs).length>1,old=!!vs["1.0"];
+ var cards=res.map(function(r,j){var c=pool[r.i];return '<div class="chunk '+(c.v==="1.0"?"":"hit")+'"><div class="h"><span>#'+(j+1)+' version '+c.v+' , effective '+c.eff+'</span><span>match '+r.s.toFixed(2)+'</span></div>'+esc(c.t)+'</div>'}).join("");
+ var verdict=old?(mixed?tag("no","CONFLICT"):tag("no","OUT OF DATE")):tag("ok","LATEST ONLY");
+ var msg=old?"The bot sees both 20 days (v1) and 22 days (v2). It may quote either, and 5 or 10 carry-over days. The employee gets the wrong answer, politely.":"Only version 2 is visible: 22 working days, carry over up to 10, use by 31 March. The answer is the latest policy.";
+ var tg=function(id,l,b){return '<label class="chk" style="border:0;padding:4px 0"><input type="checkbox" data-act="lp" data-v="'+id+'" '+(b?"checked":"")+'><span>'+l+'</span></label>'};
+ return '<p class="intro">Employees care about the latest leave rules. Here the index holds v2 chunks and, optionally, old v1 chunks. Switch the old version in or out and see what the bot would be shown for the same question.</p><div class="grid"><div class="stack"><div class="card"><div class="lab"><span>What is in the index</span></div>'+tg("v1","Old v1 (March 2026) is still in the index",LP.v1)+tg("filter","Metadata filter: only version 2.0",LP.filter)+tg("newest","Prefer the newest effective date",LP.newest)+'<p class="note" style="margin-top:8px">Best practice is to retire v1 completely: remove it from the index when v2 is published, keep a copy in the archive. A filter is the backup.</p></div>'+
+ '<div class="card"><div class="lab"><span>Still not covered: things HR publishes later</span></div><table><tr><th>Item</th><th>Where it lives</th><th>In the bot?</th></tr><tr><td>Restricted peak weeks (section 3.5)</td><td>HR publishes each quarter</td><td>'+tag("no","NO")+'</td></tr><tr><td>Public holiday calendar (section 6)</td><td>HR publishes each January</td><td>'+tag("no","NO")+'</td></tr><tr><td>Leave balances</td><td>HR leave database</td><td>'+tag("ok","SQL")+'</td></tr></table><p class="note" style="margin-top:8px">Those need an owner and a refresh date too, or the bot must say "check with HR".</p></div></div>'+
+ '<div class="stack" style="position:sticky;top:12px"><div class="card key"><div class="lab"><span>Question</span><span>'+verdict+'</span></div><p class="mono" style="margin:0">'+esc(q)+'</p>'+cards+'<p style="margin-top:10px">'+esc(msg)+'</p></div></div></div>'}
+
+/* ===== TAB 4: failure clinic ===== */
+var FAILS=[
+{h:"1. Stale version",sym:"Two different numbers for the same rule, and the old one wins.",why:"The old policy is still searchable next to the new one.",fix:"Retire the old version. Add version and effective date as metadata and filter to the latest.",own:"Policy owner announces the new version. Bot team retires the old one the same day.",test:"How many annual leave days do I get?"},
+{h:"2. Wrong cross-reference",sym:"The bot cites a section that does not contain the answer.",why:"Section 1 says sick leave beyond 15 days follows section 4.4. The rule is in section 5.4.",fix:"Chunk by clause and keep the clause number. Tell the policy owner to correct the reference in the next review.",own:"Policy owner fixes the document. Bot team logs the mismatch.",test:"What happens after 15 sick days?"},
+{h:"3. Missing fact",sym:"The bot invents a number or a definition.",why:"The policy never defines probation, yet it mentions it.",fix:"A strict rule: if the answer is not in the excerpts, say 'Not found in the DDS leave policy' and point to People and Culture.",own:"Policy owner adds the missing definition. Bot team reads the 'not found' log weekly.",test:"How long is the probation period?"},
+{h:"4. Vague follow-up",sym:"A short follow-up retrieves the wrong chunk.",why:"'And for 12 days?' means nothing without the previous question.",fix:"Rewrite the follow-up into a full question using the chat history before retrieving.",own:"Bot builder.",test:"Notice for 5 days?  then  And for 12 days?"},
+{h:"5. Ungrounded number",sym:"A confident figure that is not in any retrieved chunk.",why:"The model filled a gap from memory.",fix:"A grounding check: every number in the answer must appear in the sources. If not, replace the answer with 'not found'.",own:"Bot builder, with a test set the policy owner approves.",test:"How many days of leave for a house move?"}
+];
+function vFail(){return '<p class="intro">Five repeatable ways RAG fails on this policy. Each has a cause, a fix and an owner. Notice that three of the five need someone other than the builder to act.</p><div class="g3">'+FAILS.map(function(f){return '<div class="step"><h3>'+esc(f.h)+'</h3><div class="kv"><b>What the employee sees</b>'+esc(f.sym)+'</div><div class="kv"><b>Why</b>'+esc(f.why)+'</div><div class="kv"><b>Fix</b>'+esc(f.fix)+'</div><div class="kv"><b>Who acts</b>'+esc(f.own)+'</div><div class="kv"><b>Test question</b><span class="mono">'+esc(f.test)+'</span></div></div>'}).join("")+'<div class="guard"><b>Run these in class</b>The Day 2 notebook reproduces all five on the real policy, then fixes each. Use these test questions as your regression set after every policy update.</div></div>'}
+
+/* ===== TAB 5: knowledge ops and readiness ===== */
+var LOOP=[["Publish","Policy owner publishes the new version with an effective date."],["Hand over","Owner sends the file to the bot team, with a one-line summary of what changed."],["Retire","Bot team removes the old version from the index and archives it."],["Rebuild","Re-chunk and re-index. Keep version and section metadata."],["Test","Run the regression questions. Compare answers with the new policy."],["Release","Go live. Record the version and date the bot is on."],["Learn","Every month, read the 'not found' log and send gaps to the owner."]];
+var CHK=[
+["Clarity","We named the user: an employee asking about their own leave."],["Clarity","We wrote the decision the answer supports."],["Clarity","The bot refuses another employee's data."],["Clarity","Out of scope topics go to People and Culture."],["Clarity","We know what 'latest' means: one named document and version."],
+["Latest","A named role owns the policy."],["Latest","There is a written update process, not a favour."],["Latest","Old versions are removed from the index."],["Latest","Chunks carry version and effective date."],["Latest","The bot says which version it is on."],
+["Retrieval","We chose chunking on purpose and looked at the chunks."],["Retrieval","One rule stays in one chunk."],["Retrieval","Top-k was tested, not guessed."],["Retrieval","Follow-up questions are rewritten first."],["Retrieval","We have a test set of at least ten questions."],
+["Safety","If the policy is silent, the bot says so."],["Safety","Answers cite the section."],["Safety","Numbers are checked against the sources."],["Safety","Someone reads the 'not found' log."],["Safety","Things HR publishes later (restricted weeks, holidays) are fed in or the bot says to check with HR."]];
+function vOps(){
+ var n=Object.keys(S.chk).filter(function(k){return S.chk[k]}).length;
+ var loop=LOOP.map(function(l,i){return '<tr><td class="mono">'+(i+1)+'</td><td><b>'+l[0]+'</b></td><td>'+esc(l[1])+'</td></tr>'}).join("");
+ var groups=["Clarity","Latest","Retrieval","Safety"].map(function(g){return '<div class="card"><div class="lab"><span>'+g+'</span></div>'+CHK.map(function(c,i){return c[0]===g?'<label class="chk"><input type="checkbox" data-act="chk" data-v="'+i+'" '+(S.chk[i]?"checked":"")+'><span>'+esc(c[1])+'</span></label>':""}).join("")+'</div>'}).join("");
+ return '<p class="intro">Knowledge does not maintain itself. This is the loop that keeps DecoBot on the latest policy, followed by a 20-point readiness checklist. Tick what is true for your bot.</p><div class="grid"><div class="stack"><div class="card"><div class="lab"><span>The update loop</span></div><table><tr><th>#</th><th>Step</th><th>What happens</th></tr>'+loop+'</table></div>'+
+ '<div class="card key"><div class="lab"><span>Readiness</span></div><div class="score" id="rs">'+n+'<small>of 20</small></div><div class="meter"><i id="rm" style="width:'+(n*5)+'%"></i></div><div class="note" id="rb">'+(n>=18?"Ready for production":n>=14?"Strong, close the gaps":n>=8?"Getting there":"Early stage, the bot will drift")+'</div></div></div><div class="stack">'+groups+'</div></div>'}
+
+/* ===== router ===== */
+var TABS=[["pipe","1. Pipeline",vPipe],["chunk","2. Chunking playground",vChunk],["latest","3. Latest policy",vLatest],["fail","4. Failure clinic",vFail],["ops","5. Keep it current",vOps]];
+function render(){var id=(location.hash||"#pipe").slice(1),t=TABS.filter(function(x){return x[0]===id})[0]||TABS[0];
+ document.getElementById("app").innerHTML=t[2]();
+ document.getElementById("tabs").innerHTML=TABS.map(function(x){return '<a href="#'+x[0]+'"'+(x[0]===t[0]?' aria-current="page"':"")+'>'+x[1]+'</a>'}).join("")}
+window.addEventListener("hashchange",function(){render();window.scrollTo(0,0)});
+document.addEventListener("change",function(e){var t=e.target,a=t.getAttribute("data-act");
+ if(t.id==="st"){CH.st=t.value;CH.ov=0;render();return}
+ if(t.id==="ov"){CH.ov=parseInt(t.value,10);render();return}
+ if(t.id==="kk"){CH.k=parseInt(t.value,10);render();return}
+ if(a==="lp"){LP[t.getAttribute("data-v")]=t.checked;render();return}
+ if(a==="chk"){S.chk[t.getAttribute("data-v")]=t.checked;save();var n=Object.keys(S.chk).filter(function(k){return S.chk[k]}).length;
+  document.getElementById("rs").innerHTML=n+"<small>of 20</small>";document.getElementById("rm").style.width=(n*5)+"%";document.getElementById("rb").textContent=n>=18?"Ready for production":n>=14?"Strong, close the gaps":n>=8?"Getting there":"Early stage, the bot will drift"}});
+document.addEventListener("click",function(e){var b=e.target.closest('[data-act="q"]');if(b){CH.qi=parseInt(b.getAttribute("data-v"),10);render()}});
+S=load();render();
+</script>
+</body>
+</html>
