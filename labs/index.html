@@ -168,7 +168,7 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
 <body>
 <nav class="top"><div class="wrap">
   <b>PROJECT 9 | AI HR ENTERPRISE</b>
-  <a class="lab-btn" href="DecoBot_Prompt_Lab.html">Prompt Lab</a><a class="lab-btn alt" href="DecoBot_RAG_Playbook.html">RAG Playbook</a>
+  <a class="lab-btn" href="DecoBot_Prompt_Lab.html">Prompt Lab</a><a class="lab-btn alt" href="DecoBot_RAG_Playbook.html">RAG Playbook</a><a class="lab-btn" href="#labs" data-open="llm">LLM Models</a><a class="lab-btn alt" href="#labs" data-open="cost">Cost Calculator</a>
   <a href="#how">Pipeline</a><a href="#labs">Labs</a><a href="#data">Data</a><a href="#dictionary">Dictionary</a><a href="#glossary">Glossary</a><a href="#stack">Stack</a><a href="#deploy">Deploy</a><a href="#program">Program</a><a href="#limits">Limits</a>
 </div></nav>
 
@@ -180,6 +180,8 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
   <div class="cta">
     <a class="cta-card" href="DecoBot_Prompt_Lab.html"><span class="k">LAB 1 | PROMPTING</span><b>Prompt Lab</b><span>Clarity Canvas, system prompt and tool descriptions. Score out of 50.</span></a>
     <a class="cta-card alt" href="DecoBot_RAG_Playbook.html"><span class="k">LAB 2 | RAG</span><b>RAG Playbook</b><span>Chunking, the latest policy, failure clinic and keeping knowledge current.</span></a>
+    <a class="cta-card" href="#labs" data-open="llm"><span class="k">LLM | MODELS</span><b>Latest LLM Models</b><span>OpenAI and Gemini model list, prices and the notebook model lines.</span></a>
+    <a class="cta-card alt" href="#labs" data-open="cost"><span class="k">COST | CALCULATOR</span><b>Cost Calculator</b><span>Monthly cost of DecoBot by model, price date, usage and currency.</span></a>
   </div>
   <div class="kpis">
     <div class="kpi"><b>4</b><span>documents (PDF)</span></div>
@@ -522,6 +524,7 @@ function showPipe(i) { $$('.node').forEach((n, k) => n.classList.toggle('on', k 
 showPipe(0); 
 
 /* ---------- TABS ---------- */
+document.addEventListener('click', e => { const a = e.target.closest('[data-open]'); if (!a) return; e.preventDefault(); const t = document.querySelector('.tab[data-lab="' + a.dataset.open + '"]'); if (t) t.click(); document.getElementById('labs').scrollIntoView({behavior: 'smooth'}); });
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (!b) return; $$('.tab').forEach(t => t.classList.remove('on')); b.classList.add('on'); $$('.lab').forEach(l => l.classList.remove('on')); $('#lab-' + b.dataset.lab).classList.add('on'); if (b.dataset.lab === 'emb') { drawGrid(); drawMap(); } });
 
 /* ---------- CHUNKING LAB ---------- */
