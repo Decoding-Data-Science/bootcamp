@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DecoBot RAG Lab | Decoding Data Science</title>
+<title>AI Accelerator Bootcamp Project 9 | AI HR Enterprise Project | Decoding Data Science</title>
 <meta name="description" content="Interactive lab for the DDS HR leave chatbot: chunking, embeddings, retrieval, agent routing, cost calculator, data dictionary and glossary. Built with LlamaIndex, OpenAI and Pinecone. November 2026 edition.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +33,20 @@ nav.top .wrap{display:flex;align-items:center;gap:6px;overflow-x:auto;padding-bl
 nav.top b{font:600 13px var(--mono);letter-spacing:.14em;color:var(--ice);margin-right:12px;white-space:nowrap}
 nav.top a{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-decoration:none;padding:6px 10px;border:1px solid transparent;white-space:nowrap}
 nav.top a:hover,nav.top a.on{color:var(--ice);border-color:var(--line)}
+nav.top a.lab-btn{color:#05070b;background:var(--ice);border-color:var(--ice);font-weight:700;padding:7px 14px}
+nav.top a.lab-btn.alt{background:var(--amber);border-color:var(--amber)}
+nav.top a.lab-btn:hover{color:#05070b;filter:brightness(1.1)}
+.cta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 30px;max-width:760px}
+.cta-card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--fg);background:var(--panel);border:1px solid var(--ice);border-top:3px solid var(--ice);padding:18px 20px;transition:transform .15s,background .15s}
+.cta-card.alt{border-color:var(--amber);border-top-color:var(--amber)}
+.cta-card .k{font:600 11px var(--mono);letter-spacing:.16em;color:var(--ice)}
+.cta-card.alt .k{color:var(--amber)}
+.cta-card b{font-size:22px;line-height:1.2}
+.cta-card span:last-child{color:var(--mute);font-size:14.5px;line-height:1.5}
+.cta-card:hover{background:var(--bg2);transform:translateY(-2px)}
+.cta-card:focus-visible,nav.top a.lab-btn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+@media(max-width:700px){.cta{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.cta-card{transition:none}}
 /* hero */
 header.hero{padding-block:84px 56px}
 .eyebrow{font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ice)}
@@ -153,15 +167,20 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding-block:28px 60px;
 </head>
 <body>
 <nav class="top"><div class="wrap">
-  <b>DECOBOT LAB</b>
+  <b>PROJECT 9 | AI HR ENTERPRISE</b>
+  <a class="lab-btn" href="DecoBot_Prompt_Lab.html">Prompt Lab</a><a class="lab-btn alt" href="DecoBot_RAG_Playbook.html">RAG Playbook</a>
   <a href="#how">Pipeline</a><a href="#labs">Labs</a><a href="#data">Data</a><a href="#dictionary">Dictionary</a><a href="#glossary">Glossary</a><a href="#stack">Stack</a><a href="#deploy">Deploy</a><a href="#program">Program</a><a href="#limits">Limits</a>
 </div></nav>
 
 <div class="wrap">
 <header class="hero">
-  <div class="eyebrow">Decoding Data Science | CPD UK AI Accelerator Bootcamp | 9th edition | 27 to 29 Nov 2026</div>
-  <h1>DecoBot <em>RAG Lab</em></h1>
+  <div class="eyebrow">Decoding Data Science | AI Accelerator Bootcamp | CPD UK | 9th edition | 27 to 29 Nov 2026</div>
+  <h1>AI Accelerator Bootcamp <em>Project 9</em><br>AI HR Enterprise Project</h1>
   <p class="lead">One company, one topic: leave at DDS. See how a PDF becomes chunks, how chunks become vectors, how a question finds its answer, and what each choice costs. Every lab on this page runs in your browser.</p>
+  <div class="cta">
+    <a class="cta-card" href="DecoBot_Prompt_Lab.html"><span class="k">LAB 1 | PROMPTING</span><b>Prompt Lab</b><span>Clarity Canvas, system prompt and tool descriptions. Score out of 50.</span></a>
+    <a class="cta-card alt" href="DecoBot_RAG_Playbook.html"><span class="k">LAB 2 | RAG</span><b>RAG Playbook</b><span>Chunking, the latest policy, failure clinic and keeping knowledge current.</span></a>
+  </div>
   <div class="kpis">
     <div class="kpi"><b>4</b><span>documents (PDF)</span></div>
     <div class="kpi"><b>1</b><span>SQLite database</span></div>
@@ -417,8 +436,8 @@ policy_engine = index.as_query_engine(similarity_top_k=3, text_qa_template=qa_pr
   <div class="tw" style="margin-top:20px"><table>
     <tr><th>File</th><th>Use</th></tr>
     <tr><td>Day1_System_Prompt_and_Clarity.ipynb</td><td>Colab, no files</td></tr>
-    <tr><td>labs/DecoBot_Prompt_Lab.html</td><td>Browser playbook, no key. Clarity Canvas, prompt and tool descriptions, scored out of 50</td></tr>
-    <tr><td>labs/DecoBot_RAG_Playbook.html</td><td>Browser playbook, no key. Chunking playground, latest-policy lab, failure clinic, knowledge ops</td></tr>
+    <tr><td><a href="DecoBot_Prompt_Lab.html">DecoBot_Prompt_Lab.html</a></td><td>Browser playbook, no key. Clarity Canvas, prompt and tool descriptions, scored out of 50</td></tr>
+    <tr><td><a href="DecoBot_RAG_Playbook.html">DecoBot_RAG_Playbook.html</a></td><td>Browser playbook, no key. Chunking playground, latest-policy lab, failure clinic, knowledge ops</td></tr>
     <tr><td>Day2_RAG_and_Chunking.ipynb</td><td>Colab, upload the PDF. Index in memory</td></tr>
     <tr><td>Day2B_RAG_with_Pinecone.ipynb</td><td>OPTIONAL take-home, not taught in class. Same index in Pinecone. Needs OPENAI_API_KEY and PINECONE_API_KEY</td></tr>
     <tr><td>Day3_SQL_Tools_and_Agent.ipynb</td><td>Colab, upload the PDF and dds_leave.db</td></tr>
